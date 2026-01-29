@@ -1,0 +1,210 @@
+/* Responsive para el header */
+@media (max-width: 768px) {
+
+    .back-home-btn  {
+        width: 40px;
+        height: 40px;
+    }
+    .back-home-btn i {
+        font-size: 0.8rem;
+    }
+
+    .back-home-btn .btn-text {
+        display: none;
+    }
+
+    .filter-btn {
+        padding: 6px 12px;
+        font-size: 0.6rem;
+    }
+    
+    .filter-btn i {
+        font-size: 0.8rem;
+    }
+    
+    .control-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: var(--spacing-lg);
+        width: 95%;
+    }
+    
+    .gallery-title {
+        font-size: 1.2rem;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-title {
+        font-size: 1rem;
+        gap: 5px;
+    }
+
+    .heart-icon {
+        font-size: 0.9rem;
+    }
+
+    .borrar {
+        position: absolute;
+        opacity: 0;
+        z-index: -10;
+    }
+    .filters-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .filter-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .filter-btn {
+        padding: 4px 8px;
+        font-size: 0.5rem;
+    }
+    
+    .gallery-image img {
+        height: 500px;
+    }
+    
+    .gallery-grid {
+        display: flex;
+        perspective: 1200px;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        width: 100%;
+        padding: var(--spacing-md);
+        height: 500px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Contenedor del carrusel 3D */
+    .carousel-3d-wrapper {
+        width: 100%;
+        height: 100%;
+        perspective: 1200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    /* Posicionamiento del carrusel */
+    .gallery-grid.carousel-mode {
+        flex-wrap: wrap;
+    }
+
+    /* Estilos para las tarjetas en carrusel */
+    .carousel-mode .gallery-image {
+        position: absolute;
+        width: 280px;
+        height: 350px;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+        transform-style: preserve-3d;
+        cursor: grab;
+    }
+
+    .carousel-mode .gallery-image:active {
+        cursor: grabbing;
+    }
+
+    /* Tarjeta central (activa) */
+    .carousel-mode .gallery-image.carousel-active {
+        z-index: 10;
+        transform: translateX(0) rotateY(0deg) scale(1);
+        opacity: 1;
+        filter: blur(0px);
+    }
+
+    /* Tarjetas a la izquierda */
+    .carousel-mode .gallery-image.carousel-left-1 {
+        z-index: 9;
+        transform: translateX(-280px) rotateY(25deg) translateZ(-100px) scale(0.85);
+        opacity: 0.7;
+        filter: blur(2px);
+    }
+
+    .carousel-mode .gallery-image.carousel-left-2 {
+        z-index: 8;
+        transform: translateX(-520px) rotateY(35deg) translateZ(-200px) scale(0.7);
+        opacity: 0.5;
+        filter: blur(4px);
+    }
+
+    .carousel-mode .gallery-image.carousel-left-3 {
+        z-index: 7;
+        transform: translateX(-760px) rotateY(45deg) translateZ(-300px) scale(0.6);
+        opacity: 0.3;
+        filter: blur(6px);
+    }
+
+    /* Tarjetas a la derecha */
+    .carousel-mode .gallery-image.carousel-right-1 {
+        z-index: 9;
+        transform: translateX(280px) rotateY(-25deg) translateZ(-100px) scale(0.85);
+        opacity: 0.7;
+        filter: blur(2px);
+    }
+
+    .carousel-mode .gallery-image.carousel-right-2 {
+        z-index: 8;
+        transform: translateX(520px) rotateY(-35deg) translateZ(-200px) scale(0.7);
+        opacity: 0.5;
+        filter: blur(4px);
+    }
+
+    .carousel-mode .gallery-image.carousel-right-3 {
+        z-index: 7;
+        transform: translateX(760px) rotateY(-45deg) translateZ(-300px) scale(0.6);
+        opacity: 0.3;
+        filter: blur(6px);
+    }
+
+    /* Ocultar tarjetas fuera del rango */
+    .carousel-mode .gallery-image.carousel-hidden {
+        display: none;
+    }
+
+    /* Imagen dentro del carrusel */
+    .carousel-mode .gallery-image img {
+        height: 100%;
+        width: 100%;
+        border-radius: var(--border-radius-lg);
+    }
+
+    /* Descripción visible en carrusel */
+    .carousel-mode .gallery-image .description {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+        padding: var(--spacing-lg);
+        color: white;
+    }
+
+    .carousel-mode .gallery-image .description h3 {
+        margin: 0;
+        font-size: 1rem;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .carousel-mode .gallery-image .description p {
+        margin: 0;
+        font-size: 0.8rem;
+        opacity: 0.9;
+    }
+
+
+}
+
+

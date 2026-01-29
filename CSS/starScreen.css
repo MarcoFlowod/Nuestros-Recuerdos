@@ -1,0 +1,181 @@
+/* Importar fuentes */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: "Permanent Marker", cursive;
+    font-weight: 600;
+    font-style: normal;
+    margin-top: 110px;
+    background-color: #100e0f;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #0a0a1a;
+    }
+}
+
+#loveRain {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none
+}
+
+#galaxy {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, rgba(123, 31, 162, 0.2) 0%, rgba(0, 0, 0, 0.9) 70%);
+    z-index: 0;
+}
+
+#galaxy::after {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    background: url('https://www.transparenttextures.com/patterns/stardust.png');
+    animation: shimmer 20s infinite linear;
+    opacity: 0.2;
+    top: 0;
+    left: 0;   
+}
+
+@keyframes shimmer {
+    0% { background-position: 0 0; }
+    100% { background-position: 1000px 1000px; }
+}
+
+.start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    background: #000 url('https://cdn.pixabay.com/photo/2020/04/09/19/47/universe-5014530_1280.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+.active-screen {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.title-container {
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    text-align: center;
+    perspective: 500px;
+}
+
+.title {
+    position: relative;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 2em;
+    color: #ff5555;
+    text-shadow: 
+        4px 4px 0 #ff0000,
+        6px 6px 0 #aa0000,
+        8px 8px 0 #550000;
+    transform: rotateX(10deg) rotateY(-5deg);
+    animation: heartbeat 1.5s infinite, float 3s ease-in-out infinite;
+    display: inline-block;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 4px solid #ff5555;
+    box-shadow: 
+        0 0 20px #ff0000,
+        inset 0 0 20px #ff0000;
+}
+@keyframes heartbeat {
+    0% { transform: rotateX(10deg) rotateY(-5deg) scale(1); }
+    50% { transform: rotateX(10deg) rotateY(-5deg) scale(1.05); }
+    100% { transform: rotateX(10deg) rotateY(-5deg) scale(1); }
+}
+@keyframes float {
+    0%, 100% { transform: rotateX(10deg) rotateY(-5deg) translateY(0); }
+    50% { transform: rotateX(10deg) rotateY(-5deg) translateY(-10px); }
+}
+.pixel-corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    margin: -10px;
+    background-color: #ff5555;
+    z-index: 3;
+}
+.pixel-corner:nth-child(1) {
+    top: 0;
+    left: 0;
+}
+.pixel-corner:nth-child(2) {
+    top: 0;
+    right: 0;
+}
+.pixel-corner:nth-child(3) {
+    bottom: 0;
+    left: 0;
+}
+.pixel-corner:nth-child(4) {
+    bottom: 0;
+    right: 0;
+}
+
+.instructions {
+    position: absolute;
+    bottom: 40px;
+    text-align: center;
+    z-index: 2;
+    color: #ff88aa;
+    font-size: 0.9rem;
+    font-family: 'Press Start 2P', cursive;
+    animation: fadeInOut 3s infinite;
+}
+
+.instructions p {
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(255, 136, 170, 0.7);
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}

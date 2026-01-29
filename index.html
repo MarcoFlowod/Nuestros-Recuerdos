@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./CSS/starScreen.css">
+    <link rel="stylesheet" href="./CSS/pricipalScreen.css">
+    <link rel="stylesheet" href="./CSS/responsive.css">
+    <title>Nuestros Recuerdos ♥</title>
+</head>
+<body>
+    <audio id="backgroundMusic"  loop>
+    <source src="assets/I'm Not In Love.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio.
+    </audio>
+
+<!-- ====== Pantalla de incio =====-->
+    <section id="startScreen" class="start-screen">
+        <canvas id="loveRain"></canvas>
+        <div id="galaxy"></div>
+
+        <div class="title-container">
+            <div class="pixel-corner"></div>
+            <div class="pixel-corner"></div>
+            <div class="pixel-corner"></div>
+            <div class="pixel-corner"></div>
+            <h1 class="title" id="teQuieroLink" onclick="location.href='#recuerdoScreen'" style="color:#ff5555; cursor: pointer;">
+                TE QUIERO
+            </h1>
+        </div>
+        <div class="instructions">
+            <p>Haz clic en "TE QUIERO" para ver nuestros recuerdos♥</p>
+        </div>
+    </section>
+
+<!--========== Pantalla de la galeria ==========-->
+    <section id="memoriesScreen" class="memories-screen">
+        
+        <div class="rain" id="rain"></div>
+        <canvas id="loveRain2"></canvas>
+        
+        <header class="header-container">
+            <!--===== Navegación superior =====-->
+            <div class="header-top">
+                <button id="backToHome" class="back-home-btn" aria-label="Volver al inicio">
+                    <i class="fas fa-home"></i>
+                    <span class="btn-text">Inicio</span>
+                </button>
+                
+                <div class="header-center">
+                    <h2 class="gallery-title">
+                        <i class="fas fa-heart heart-icon"></i> 
+                        Nuestros Recuerdos
+                        <i class="fas fa-heart heart-icon"></i>
+                    </h2>
+                </div>
+                <button id="backToHome" class="back-home-btn" aria-label="Volver al inicio" onclick="window.location.href='agregar.html'" >
+                    <i class="fas fa-plus"></i>
+                    <span class="btn-text">Agregar♥</span>
+                </button>
+            </div>
+            <!--===== Filtros de búsqueda ======-->
+            <div class="filters-container">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Todos</span>
+                    </button>
+                    <button class="filter-btn" data-filter="favorite">
+                        <i class="fas fa-heart"></i>
+                        <span>Favoritas</span>
+                    </button>
+                    <button class="filter-btn" data-filter="special">
+                        <i class="fas fa-star"></i>
+                        <span>Especiales</span>
+                    </button>
+                    <button class="filter-btn borrar" data-filter="recent">
+                        <i class="fas fa-clock"></i>
+                        <span>Recientes</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== Galería de recuerdos =====-->
+        <main class="gallery-container">
+            <div class="gallery-grid" id="gallery-container">
+                <!-- Template de imagen -->
+                <figure class="gallery-image" id="galleryImg" style="display: none;">
+                    <img src="" alt="" loading="lazy" onclick="FullImg(this.src)">
+                    <div class="image-overlay">
+                        <div class="top-btns">
+                            <button class="favorite-btn" title="Marcar como favorito">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <button class="especial-btn" title="Marcar como especial">
+                                <i class="far fa-star"></i>
+                            </button>
+                        </div>
+                        <div class="info-text">
+                            <span class="fecha"></span>
+                            <span class="lugar"></span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <h3></h3>
+                        <p></p>
+                    </div>
+                </figure>
+            </div>
+        </main>
+        
+        <footer class="special-message">
+            <div class="message-container">
+                <i class="fas fa-quote-left"></i>
+                <p class="message-text">
+                    Cada uno de estos momentos es un tesoro que guardo en mi corazón. 
+                    Gracias por llenar mi vida de amor y felicidad.
+                </p>
+                <i class="fas fa-quote-right"></i>
+                <div class="message-signature">
+                    <p>Con todo mi amor,</p>
+                    <p class="signature-name">Para mi persona especial</p>
+                </div>
+            </div>
+        </footer>
+    </section>
+<!--=========== Modal para ver imagen ampliada ==========-->
+        <div id="FullImgBox" class="full-img">
+        <img id="fullImg" src="" alt="">
+        <span onclick="closeImg()">&times</span>
+    </div>
+
+    <script src="./JS/controlador.js"></script>
+    <script src="./JS/screen1.js"></script>
+    <script src="./JS/screen2.js"></script>
+    <script src="./JS/imgs.js"></script>
+    <script src="./JS/filters.js"></script>
+    <script src="./JS/carousel.js"></script>
+</body>
+</html>
