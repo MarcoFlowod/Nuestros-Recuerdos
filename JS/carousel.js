@@ -11,6 +11,9 @@ class Carousel3D {
         this.isDragging = false;
         this.dragStart = 0;
         this.dragOffset = 0;
+        this.touchStartTime = 0;
+        this.touchEndTime = 0;
+        this.rafId = null;
         
         this.init();
     }
@@ -80,8 +83,11 @@ class Carousel3D {
     handleTouchStart(e) {
         this.isDragging = true;
         this.touchStartX = e.touches[0].clientX;
+        this.touchEndX = this.touchStartX;
         this.dragStart = e.touches[0].clientX;
         this.dragOffset = 0;
+        this.touchStartTime = Date.now();
+        this.disableTransition();
     }
 
     handleTouchMove(e) {
@@ -96,20 +102,26 @@ class Carousel3D {
 
     handleTouchEnd(e) {
         this.isDragging = false;
-        
-        const swipeThreshold = 50;
-        const diff = this.touchStartX - this.touchEndX;
+        this.touchEndTime = Date.now();
 
-        if (Math.abs(diff) > swipeThreshold) {
+        const swipeThreshold = 50; // px mínimo
+        const diff = this.touchStartX - this.touchEndX;
+        const dt = Math.max(1, this.touchEndTime - this.touchStartTime); // ms
+        const velocity = Math.abs(diff) / dt; // px per ms
+
+        // Si la velocidad es alta, considerar como flick y centrar inmediatamente
+        const flickVelocityThreshold = 0.7;
+
+        if (Math.abs(diff) > swipeThreshold || velocity > flickVelocityThreshold) {
+            this.enableTransition(120);
             if (diff > 0) {
-                // Swipe izquierda -> siguiente slide
                 this.nextSlide();
             } else {
-                // Swipe derecha -> slide anterior
                 this.previousSlide();
             }
         } else {
-            // Volver a la posición normal si no hay suficiente swipe
+            // Snap rápido de regreso
+            this.enableTransition(120);
             this.updateCarouselPositions();
         }
     }
@@ -118,6 +130,8 @@ class Carousel3D {
         this.isDragging = true;
         this.dragStart = e.clientX;
         this.dragOffset = 0;
+        this.dragStartTime = Date.now();
+        this.disableTransition();
     }
 
     handleMouseMove(e) {
@@ -131,17 +145,20 @@ class Carousel3D {
         this.isDragging = false;
         
         const swipeThreshold = 50;
+        const dragEndTime = Date.now();
+        const dt = Math.max(1, dragEndTime - (this.dragStartTime || dragEndTime));
+        const velocity = Math.abs(this.dragOffset) / dt;
+        const flickVelocityThreshold = 0.7;
 
-        if (Math.abs(this.dragOffset) > swipeThreshold) {
+        if (Math.abs(this.dragOffset) > swipeThreshold || velocity > flickVelocityThreshold) {
+            this.enableTransition(120);
             if (this.dragOffset < 0) {
-                // Arrastre izquierda -> siguiente slide
                 this.nextSlide();
             } else {
-                // Arrastre derecha -> slide anterior
                 this.previousSlide();
             }
         } else {
-            // Volver a la posición normal
+            this.enableTransition(120);
             this.updateCarouselPositions();
         }
     }
@@ -154,33 +171,51 @@ class Carousel3D {
     }
 
     applyDragTransform(offset) {
-        const sensitivity = 0.5;
-        
-        this.galleryImages.forEach((img, index) => {
-            const position = this.getPositionClass(index);
-            let baseTransform = this.getBaseTransform(position);
-            
-            // Modificar el transform basado en el arrastre
-            const transform = baseTransform.replace(/translateX\(([^)]+)\)/, (match, p1) => {
-                const baseValue = parseFloat(p1);
-                const newValue = baseValue + offset * sensitivity;
-                return `translateX(${newValue}px)`;
+        const sensitivity = 0.6;
+
+        if (this.rafId) cancelAnimationFrame(this.rafId);
+        this.rafId = requestAnimationFrame(() => {
+            this.galleryImages.forEach((img, index) => {
+                const position = this.getPositionClass(index);
+                let baseTransform = this.getBaseTransform(position);
+
+                const transform = baseTransform.replace(/translateX\(([^)]+)\)/, (match, p1) => {
+                    const baseValue = parseFloat(p1);
+                    const newValue = baseValue + offset * sensitivity;
+                    return `translateX(${newValue}px)`;
+                });
+
+                img.style.transform = transform;
             });
-            
-            img.style.transform = transform;
         });
     }
 
     nextSlide() {
         this.currentIndex = (this.currentIndex + 1) % this.galleryImages.length;
+        this.enableTransition(140);
         this.updateCarouselPositions();
         this.logCurrentSlide();
     }
 
     previousSlide() {
         this.currentIndex = (this.currentIndex - 1 + this.galleryImages.length) % this.galleryImages.length;
+        this.enableTransition(140);
         this.updateCarouselPositions();
         this.logCurrentSlide();
+    }
+
+    enableTransition(duration = 180) {
+        const easing = 'cubic-bezier(0.22, 1, 0.36, 1)';
+        const t = `${duration}ms ${easing}`;
+        this.galleryImages.forEach(img => {
+            img.style.transition = `transform ${t}`;
+        });
+    }
+
+    disableTransition() {
+        this.galleryImages.forEach(img => {
+            img.style.transition = 'none';
+        });
     }
 
     updateCarouselPositions() {
