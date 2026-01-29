@@ -14,6 +14,7 @@ class Carousel3D {
         this.touchStartTime = 0;
         this.touchEndTime = 0;
         this.rafId = null;
+        this.baseGridOffset = 0;
         
         this.init();
     }
@@ -46,6 +47,9 @@ class Carousel3D {
 
         // Establecer posiciones iniciales
         this.updateCarouselPositions();
+
+        // Asegurar que el contenedor tenga will-change para transformaciones
+        if (this.galleryGrid) this.galleryGrid.style.willChange = 'transform';
 
         // Configurar event listeners
         this.setupTouchListeners();
@@ -88,6 +92,7 @@ class Carousel3D {
         this.dragOffset = 0;
         this.touchStartTime = Date.now();
         this.disableTransition();
+        if (this.galleryGrid) this.galleryGrid.style.transition = 'none';
     }
 
     handleTouchMove(e) {
@@ -132,6 +137,7 @@ class Carousel3D {
         this.dragOffset = 0;
         this.dragStartTime = Date.now();
         this.disableTransition();
+        if (this.galleryGrid) this.galleryGrid.style.transition = 'none';
     }
 
     handleMouseMove(e) {
@@ -187,6 +193,11 @@ class Carousel3D {
 
                 img.style.transform = transform;
             });
+            // También desplazar el contenedor para mantener la imagen centrada durante el arrastre
+            if (this.galleryGrid) {
+                const gridOffset = this.baseGridOffset + offset * 0.6;
+                this.galleryGrid.style.transform = `translateX(${gridOffset}px)`;
+            }
         });
     }
 
@@ -263,6 +274,28 @@ class Carousel3D {
                     img.classList.add('carousel-hidden');
             }
         });
+
+        // Calcular y aplicar desplazamiento del contenedor para centrar la imagen activa
+        this.centerActiveImage();
+    }
+
+    centerActiveImage() {
+        if (!this.galleryGrid || !this.galleryImages.length) return;
+
+        const containerRect = this.galleryGrid.getBoundingClientRect();
+        const containerCenterX = containerRect.left + containerRect.width / 2;
+
+        const activeImg = this.galleryImages[this.currentIndex];
+        const imgRect = activeImg.getBoundingClientRect();
+        const imgCenterX = imgRect.left + imgRect.width / 2;
+
+        // Delta que necesitamos aplicar al grid para centrar la imagen
+        const delta = containerCenterX - imgCenterX;
+
+        this.baseGridOffset = (this.baseGridOffset || 0) + delta;
+
+        // Aplicar transform con la transición ya definida por enableTransition
+        this.galleryGrid.style.transform = `translateX(${this.baseGridOffset}px)`;
     }
 
     getPositionClass(index) {
