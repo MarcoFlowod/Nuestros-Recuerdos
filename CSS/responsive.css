@@ -49,7 +49,9 @@
     .heart-icon {
         font-size: 0.9rem;
     }
-
+    .back-home-btn:hover {
+        transform: none;
+    }
     .borrar {
         position: absolute;
         opacity: 0;
@@ -69,18 +71,54 @@
         padding: 4px 8px;
         font-size: 0.5rem;
     }
-    
-    .gallery-image img {
-        height: 420px;
+
+    .gallery-container {
+        padding: 10px;
     }
-    
+
     .gallery-grid {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
         width: 100%;
+        padding: 10px;
+    }
+
+    .gallery-image {
+        box-shadow: var(--shadow-xl);
+        border-color: var(--bg-darker);
+    }
+    .gallery-image img {
+        height: 420px;
+    }
+    .gallery-image:hover img {
+        transform: none;
+    }
+    
+    .favorite-btn, .especial-btn {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    .image-overlay {
+        opacity: 1;
+        background: transparent;
+    }
+
+    .info-text {
+        margin: 5px;
+        margin-bottom: 8rem;
+    }
+
+    .fecha, .lugar {
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 5px;
+        padding: 2px 6px;
     }
 
 
+    /*modal*/
+    .full-img span {
+        top: 20%;
+        left: 30px;
+    }
 }
 
 
