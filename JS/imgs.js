@@ -127,19 +127,54 @@ function generarGaleria() {
 }
 
 // MODAL DE IMAGEN AMPLIADA
-const fullImgBox = document.getElementById('FullImgBox');
-const fullImg = document.getElementById('fullImg');
+let fullImgBox;
+let fullImg;
 
 function FullImg(reference) {
+    // Asegurarse de obtener los elementos si aún no existen
+    if (!fullImgBox || !fullImg) {
+        fullImgBox = document.getElementById('FullImgBox');
+        fullImg = document.getElementById('fullImg');
+        if (!fullImgBox || !fullImg) return;
+    }
+
     fullImgBox.style.display = 'flex';
     fullImg.src = reference;
+    // Intentar dar foco al overlay para mejorar la accesibilidad
+    try { fullImgBox.focus(); } catch (e) {}
 }
 
 function closeImg() {
+    if (!fullImgBox) fullImgBox = document.getElementById('FullImgBox');
+    if (!fullImgBox) return;
     fullImgBox.style.display = 'none';
+    if (fullImg) fullImg.src = '';
 }
 
 // Ejecutar cuando carga la página
 document.addEventListener('DOMContentLoaded', () => {
     generarGaleria();
+
+    // Obtener elementos ahora que el DOM está listo
+    fullImgBox = document.getElementById('FullImgBox');
+    fullImg = document.getElementById('fullImg');
+
+    if (!fullImgBox || !fullImg) return;
+
+    // Cerrar al hacer clic fuera de la imagen (en el overlay)
+    fullImgBox.addEventListener('click', (e) => {
+        if (e.target === fullImgBox) {
+            closeImg();
+        }
+    });
+
+    // Cerrar con la tecla Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && fullImgBox.style.display === 'flex') {
+            closeImg();
+        }
+    });
+
+    // Hacer el overlay enfocadable para soporte de teclado
+    fullImgBox.tabIndex = -1;
 });
