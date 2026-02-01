@@ -3,11 +3,6 @@
 }
 
 @media (max-width: 768px) {
-
-    .gallery-container {
-        padding-top: var(--spacing-sm)
-    }
-
     .gallery-grid {
         display: none;
     }
@@ -15,7 +10,7 @@
     .mobile-swiper {
         display: block;
         width: 100%;
-        height: 500px;
+        height: auto;
         padding: 0 8px;
         margin: calc(var(--header-height) + 8px) 0 20px 0;
         z-index: 20; /* asegurarse que quede por encima de fondos */
@@ -72,11 +67,18 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        pointer-events: auto;
+        /* Permitir que el overlay no bloquee clicks sobre la imagen por defecto */
+        pointer-events: none;
         padding: var(--spacing-md);
     }
 
     /* Botones en la esquina superior derecha */
+    /* Los elementos interactivos dentro del overlay deben aceptar pointer-events */
+    .mobile-gallery-image .top-btns,
+    .mobile-gallery-image .top-btns button,
+    .mobile-gallery-image .info-text {
+        pointer-events: auto;
+    }
     .mobile-gallery-image .top-btns {
         display: flex;
         gap: var(--spacing-sm);
@@ -139,6 +141,9 @@
     .mobile-swiper .description-mobile {
         display: none; /* usamos la estructura completa en el slide */
     }
+
 }
+
+
 
 

@@ -102,6 +102,100 @@ class FilterManager {
         this.setupMobileListeners();
     }
 
+    // Actualiza la UI (desktop y móvil) del botón de favorito para un index dado
+    updateFavoriteUI(index) {
+        const desktopImg = document.querySelector(`.gallery-image[data-index="${index}"]`);
+        const mobileImg = document.querySelector(`.mobile-gallery-image[data-index="${index}"]`);
+
+        if (this.favorites.includes(index)) {
+            // desktop
+            if (desktopImg) {
+                const btn = desktopImg.querySelector('.favorite-btn');
+                if (btn) {
+                    btn.classList.add('active');
+                    const icon = btn.querySelector('i');
+                    if (icon) { icon.classList.remove('far'); icon.classList.add('fas'); }
+                }
+                desktopImg.classList.add('favorite');
+            }
+            // mobile
+            if (mobileImg) {
+                const btn = mobileImg.querySelector('.favorite-btn');
+                if (btn) {
+                    btn.classList.add('active');
+                    const icon = btn.querySelector('i');
+                    if (icon) { icon.classList.remove('far'); icon.classList.add('fas'); }
+                }
+                mobileImg.classList.add('favorite');
+            }
+        } else {
+            if (desktopImg) {
+                const btn = desktopImg.querySelector('.favorite-btn');
+                if (btn) {
+                    btn.classList.remove('active');
+                    const icon = btn.querySelector('i');
+                    if (icon) { icon.classList.remove('fas'); icon.classList.add('far'); }
+                }
+                desktopImg.classList.remove('favorite');
+            }
+            if (mobileImg) {
+                const btn = mobileImg.querySelector('.favorite-btn');
+                if (btn) {
+                    btn.classList.remove('active');
+                    const icon = btn.querySelector('i');
+                    if (icon) { icon.classList.remove('fas'); icon.classList.add('far'); }
+                }
+                mobileImg.classList.remove('favorite');
+            }
+        }
+    }
+
+    // Actualiza la UI (desktop y móvil) del botón de especial para un index dado
+    updateSpecialUI(index) {
+        const desktopImg = document.querySelector(`.gallery-image[data-index="${index}"]`);
+        const mobileImg = document.querySelector(`.mobile-gallery-image[data-index="${index}"]`);
+
+        if (this.specials.includes(index)) {
+            if (desktopImg) {
+                const btn = desktopImg.querySelector('.especial-btn');
+                if (btn) {
+                    btn.classList.add('active');
+                    const icon = btn.querySelector('i');
+                    if (icon) { icon.classList.remove('far'); icon.classList.add('fas'); }
+                }
+                desktopImg.classList.add('special');
+            }
+            if (mobileImg) {
+                const btn = mobileImg.querySelector('.especial-btn');
+                if (btn) {
+                    btn.classList.add('active');
+                    const icon = btn.querySelector('i');
+                    if (icon) { icon.classList.remove('far'); icon.classList.add('fas'); }
+                }
+                mobileImg.classList.add('special');
+            }
+        } else {
+            if (desktopImg) {
+                const btn = desktopImg.querySelector('.especial-btn');
+                if (btn) {
+                    btn.classList.remove('active');
+                    const icon = btn.querySelector('i');
+                    if (icon) { icon.classList.remove('fas'); icon.classList.add('far'); }
+                }
+                desktopImg.classList.remove('special');
+            }
+            if (mobileImg) {
+                const btn = mobileImg.querySelector('.especial-btn');
+                if (btn) {
+                    btn.classList.remove('active');
+                    const icon = btn.querySelector('i');
+                    if (icon) { icon.classList.remove('fas'); icon.classList.add('far'); }
+                }
+                mobileImg.classList.remove('special');
+            }
+        }
+    }
+
     // Configura listeners solo para elementos móviles del swiper (llamable después de re-render)
     setupMobileListeners() {
         this.mobileImages = document.querySelectorAll('.mobile-gallery-image');
@@ -143,6 +237,34 @@ class FilterManager {
 
             // Restaurar estados al cargar (móvil)
             this.updateImageState(index, mImg, freshFavorite, freshSpecial);
+            // También asegurar que los íconos y clases estén sincronizados
+            this.updateFavoriteUI(index);
+            this.updateSpecialUI(index);
+
+            // Añadir listeners para abrir el modal al tocar la imagen o la tarjeta (móvil)
+            if (!mImg.dataset.listenersAdded) {
+                // Reemplazar la imagen por un clon para evitar listeners duplicados
+                const imgEl = mImg.querySelector('img');
+                if (imgEl) {
+                    const newImg = imgEl.cloneNode(true);
+                    imgEl.replaceWith(newImg);
+                    newImg.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        try { FullImg(newImg.src); } catch (err) { console.warn('FullImg no disponible', err); }
+                    });
+                }
+
+                mImg.addEventListener('click', (e) => {
+                    // Si el click fue en un botón, no abrir el modal
+                    if (e.target.closest('button') || e.target.closest('.top-btns')) return;
+                    const src = mImg.querySelector('img') ? mImg.querySelector('img').src : null;
+                    if (src) {
+                        try { FullImg(src); } catch (err) { console.warn('FullImg no disponible', err); }
+                    }
+                });
+
+                mImg.dataset.listenersAdded = '1';
+            }
         });
     }
 
@@ -238,24 +360,21 @@ class FilterManager {
     }
 
     toggleFavorite(index, imgElement, favoriteBtn, event) {
+        console.debug('[FilterManager] toggleFavorite called', { index, favorites: this.favorites.slice() });
         if (this.favorites.includes(index)) {
             // Remover de favoritos
             this.favorites = this.favorites.filter(i => i !== index);
-            favoriteBtn.classList.remove('active');
-            favoriteBtn.querySelector('i').classList.remove('fas');
-            favoriteBtn.querySelector('i').classList.add('far');
-            imgElement.classList.remove('favorite');
+            console.debug('[FilterManager] removed favorite', index);
         } else {
             // Agregar a favoritos
             this.favorites.push(index);
-            favoriteBtn.classList.add('active');
-            favoriteBtn.querySelector('i').classList.remove('far');
-            favoriteBtn.querySelector('i').classList.add('fas');
-            imgElement.classList.add('favorite');
-            
+            console.debug('[FilterManager] added favorite', index);
             // Crear animación de corazón
             this.createHeartAnimation(event);
         }
+
+        // Actualizar UI en desktop y móvil de forma consistente
+        try { this.updateFavoriteUI(index); } catch (e) { console.warn(e); }
 
         // Guardar en localStorage
         localStorage.setItem('favorites', JSON.stringify(this.favorites));
@@ -268,24 +387,21 @@ class FilterManager {
     }
 
     toggleSpecial(index, imgElement, specialBtn, event) {
+        console.debug('[FilterManager] toggleSpecial called', { index, specials: this.specials.slice() });
         if (this.specials.includes(index)) {
             // Remover de especiales
             this.specials = this.specials.filter(i => i !== index);
-            specialBtn.classList.remove('active');
-            specialBtn.querySelector('i').classList.remove('fas');
-            specialBtn.querySelector('i').classList.add('far');
-            imgElement.classList.remove('special');
+            console.debug('[FilterManager] removed special', index);
         } else {
             // Agregar a especiales
             this.specials.push(index);
-            specialBtn.classList.add('active');
-            specialBtn.querySelector('i').classList.remove('far');
-            specialBtn.querySelector('i').classList.add('fas');
-            imgElement.classList.add('special');
-            
+            console.debug('[FilterManager] added special', index);
             // Crear animación de estrella
             this.createStarAnimation(event);
         }
+
+        // Actualizar UI en desktop y móvil de forma consistente
+        try { this.updateSpecialUI(index); } catch (e) { console.warn(e); }
 
         // Guardar en localStorage
         localStorage.setItem('specials', JSON.stringify(this.specials));
@@ -305,6 +421,14 @@ class FilterManager {
                 favoriteBtn.querySelector('i').classList.remove('far');
                 favoriteBtn.querySelector('i').classList.add('fas');
             }
+            if (imgElement) imgElement.classList.add('favorite');
+        } else {
+            if (favoriteBtn) {
+                favoriteBtn.classList.remove('active');
+                favoriteBtn.querySelector('i').classList.remove('fas');
+                favoriteBtn.querySelector('i').classList.add('far');
+            }
+            if (imgElement) imgElement.classList.remove('favorite');
         }
 
         // Verificar si está en especiales
@@ -314,6 +438,14 @@ class FilterManager {
                 specialBtn.querySelector('i').classList.remove('far');
                 specialBtn.querySelector('i').classList.add('fas');
             }
+            if (imgElement) imgElement.classList.add('special');
+        } else {
+            if (specialBtn) {
+                specialBtn.classList.remove('active');
+                specialBtn.querySelector('i').classList.remove('fas');
+                specialBtn.querySelector('i').classList.add('far');
+            }
+            if (imgElement) imgElement.classList.remove('special');
         }
     }
 
