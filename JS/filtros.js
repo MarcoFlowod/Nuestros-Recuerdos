@@ -194,7 +194,7 @@ class FilterManager {
     }
 
     createHeartAnimation(event) {
-        const hearts = ["❤", "💕", "💖", "💝", "💗"];
+        const hearts = ["❤️", ];
         const heart = document.createElement('div');
         heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
         heart.style.position = 'fixed';
@@ -211,7 +211,7 @@ class FilterManager {
     }
 
     createStarAnimation(event) {
-        const stars = ["⭐", "🌟"];
+        const stars = ["⭐", ];
         const star = document.createElement('div');
         star.textContent = stars[Math.floor(Math.random() * stars.length)];
         star.style.position = 'fixed';

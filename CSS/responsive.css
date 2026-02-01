@@ -121,4 +121,39 @@
     }
 }
 
+/* Swiper móvil: ocultar por defecto y mostrar solo en pantallas pequeñas */
+.mobile-swiper {
+    display: none;
+}
+
+@media (max-width: 480px) {
+    /* Ocultar la grilla desktop y mostrar el swiper móvil */
+    .gallery-grid {
+        display: none;
+    }
+    .mobile-swiper {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin: 0 auto 20px;
+    }
+    .mobile-swiper .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: transparent;
+    }
+    .mobile-swiper .swiper-slide img {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    .mobile-swiper .description-mobile {
+        padding: 8px 10px;
+        text-align: center;
+        color: var(--text-light, #fff);
+    }
+}
+
 

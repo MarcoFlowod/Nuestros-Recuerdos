@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Swiper CSS (solo usado en pantallas móviles) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
     <link rel="stylesheet" href="./CSS/starScreen.css">
     <link rel="stylesheet" href="./CSS/pricipalScreen.css">
     <link rel="stylesheet" href="./CSS/responsive.css">
@@ -87,6 +89,14 @@
 
         <!-- ===== Galería de recuerdos =====-->
         <main class="gallery-container">
+            <!-- Swiper para móviles (se muestra solo en pantallas pequeñas) -->
+            <div class="mobile-swiper swiper mySwiper" style="display: none;">
+                <div class="swiper-wrapper" id="mobile-swiper-wrapper">
+                    <!-- Slides generados dinámicamente -->
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+
             <div class="gallery-grid" id="gallery-container">
                 <!-- Template de imagen -->
                 <figure class="gallery-image" id="galleryImg" style="display: none;">
@@ -126,7 +136,7 @@
                     <p class="signature-name">Para mi persona especial</p>
                 </div>
             </div>
-        </footer>
+        </footer
     </section>
 <!--=========== Modal para ver imagen ampliada ==========-->
         <div id="FullImgBox" class="full-img">
@@ -134,10 +144,13 @@
         <span onclick="closeImg()">&times</span>
     </div>
 
+    <!-- Swiper JS (solo para móviles) -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+
     <script src="./JS/controlador.js"></script>
     <script src="./JS/screen1.js"></script>
     <script src="./JS/screen2.js"></script>
-    <script src="./JS/imgs.js"></script>
-    <script src="./JS/filters.js"></script>
+    <script src="./JS/galeria.js"></script>
+    <script src="./JS/filtros.js"></script>
 </body>
 </html>

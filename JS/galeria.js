@@ -87,17 +87,20 @@ const fotos = [
         lugar: "Corazón",
         //categoria: "special"
     }
-];
+ ];
+
+let mobileSwiper = null;
 
 // Generar galería dinámicamente
 function generarGaleria() {
     const container = document.getElementById('gallery-container');
     const galleryImg = document.getElementById('galleryImg');
+    const mobileWrapper = document.getElementById('mobile-swiper-wrapper');
     
     if (!container || !galleryImg) return;
     
     fotos.forEach((foto, index) => {
-        // Clonar el template
+        // Clonar el template para la grilla
         const figure = galleryImg.cloneNode(true);
         figure.id = ''; // Remover id del template
         figure.style.display = ''; // Mostrar el elemento clonado
@@ -118,6 +121,20 @@ function generarGaleria() {
         figure.querySelector('.description p').textContent = foto.descripcion;
         
         container.appendChild(figure);
+
+        // Crear slide para Swiper móvil si existe el wrapper
+        if (mobileWrapper) {
+            const slide = document.createElement('div');
+            slide.className = 'swiper-slide';
+            slide.innerHTML = `
+                <img src="${foto.url}" alt="${foto.titulo}" loading="lazy" onclick="FullImg(this.src)">
+                <div class="description-mobile">
+                    <h3>${foto.titulo}</h3>
+                    <p>${foto.descripcion}</p>
+                </div>
+            `;
+            mobileWrapper.appendChild(slide);
+        }
     });
     
     // Remover el template después de generar la galería
@@ -125,6 +142,33 @@ function generarGaleria() {
         galleryImg.remove();
     }
 }
+
+// Inicializa o destruye el Swiper móvil según el ancho de la pantalla
+function initMobileSwiper() {
+    const breakpoint = 768;
+    const mobileEl = document.querySelector('.mobile-swiper');
+    if (window.innerWidth <= breakpoint && mobileEl) {
+        if (!mobileSwiper && typeof Swiper !== 'undefined') {
+            mobileSwiper = new Swiper('.mySwiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                loop: true,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+            });
+        }
+    } else {
+        if (mobileSwiper) {
+            try {
+                mobileSwiper.destroy(true, true);
+            } catch (e) {}
+            mobileSwiper = null;
+        }
+    }
+}
+
 
 // MODAL DE IMAGEN AMPLIADA
 let fullImgBox;
@@ -154,6 +198,10 @@ function closeImg() {
 // Ejecutar cuando carga la página
 document.addEventListener('DOMContentLoaded', () => {
     generarGaleria();
+
+    // Inicializar o destruir Swiper según el ancho de pantalla
+    initMobileSwiper();
+    window.addEventListener('resize', initMobileSwiper);
 
     // Obtener elementos ahora que el DOM está listo
     fullImgBox = document.getElementById('FullImgBox');
