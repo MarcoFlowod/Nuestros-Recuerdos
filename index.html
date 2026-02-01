@@ -90,7 +90,7 @@
         <!-- ===== Galería de recuerdos =====-->
         <main class="gallery-container">
             <!-- Swiper para móviles (se muestra solo en pantallas pequeñas) -->
-            <div class="mobile-swiper swiper mySwiper" style="display: none;">
+            <div class="mobile-swiper swiper mySwiper">
                 <div class="swiper-wrapper" id="mobile-swiper-wrapper">
                     <!-- Slides generados dinámicamente -->
                 </div>
@@ -136,7 +136,7 @@
                     <p class="signature-name">Para mi persona especial</p>
                 </div>
             </div>
-        </footer
+        </footer>
     </section>
 <!--=========== Modal para ver imagen ampliada ==========-->
         <div id="FullImgBox" class="full-img">
@@ -144,13 +144,15 @@
         <span onclick="closeImg()">&times</span>
     </div>
 
+    
     <!-- Swiper JS (solo para móviles) -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
-
     <script src="./JS/controlador.js"></script>
     <script src="./JS/screen1.js"></script>
     <script src="./JS/screen2.js"></script>
     <script src="./JS/galeria.js"></script>
     <script src="./JS/filtros.js"></script>
+
+
 </body>
 </html>

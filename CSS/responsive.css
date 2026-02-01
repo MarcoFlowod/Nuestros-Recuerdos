@@ -126,8 +126,13 @@
     display: none;
 }
 
-@media (max-width: 480px) {
-    /* Ocultar la grilla desktop y mostrar el swiper móvil */
+@media (max-width: 768px) {
+    /* Ajustes para móviles: ocultar la grilla desktop y mostrar el swiper móvil */
+    .gallery-container {
+        /* Evitar que el header fijo tape el contenido */
+        padding-top: calc(var(--header-height) + 16px);
+    }
+
     .gallery-grid {
         display: none;
     }
@@ -135,7 +140,8 @@
         display: block;
         width: 100%;
         height: auto;
-        margin: 0 auto 20px;
+        margin: calc(var(--header-height) + 8px) auto 20px;
+        z-index: 20; /* asegurarse que quede por encima de fondos */
     }
     .mobile-swiper .swiper-slide {
         display: flex;

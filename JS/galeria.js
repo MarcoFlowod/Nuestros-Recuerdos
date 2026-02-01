@@ -149,6 +149,8 @@ function initMobileSwiper() {
     const mobileEl = document.querySelector('.mobile-swiper');
     if (window.innerWidth <= breakpoint && mobileEl) {
         if (!mobileSwiper && typeof Swiper !== 'undefined') {
+            // Asegurar que el contenedor sea visible antes de inicializar
+            try { mobileEl.style.display = 'block'; } catch (e) {}
             mobileSwiper = new Swiper('.mySwiper', {
                 slidesPerView: 1,
                 spaceBetween: 20,
@@ -166,6 +168,8 @@ function initMobileSwiper() {
             } catch (e) {}
             mobileSwiper = null;
         }
+        // Ocultar el contenedor en pantallas grandes
+        try { if (mobileEl) mobileEl.style.display = 'none'; } catch (e) {}
     }
 }
 
