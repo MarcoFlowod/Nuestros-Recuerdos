@@ -126,12 +126,29 @@ function generarGaleria() {
         if (mobileWrapper) {
             const slide = document.createElement('div');
             slide.className = 'swiper-slide';
+            // Usar una estructura similar al template para mantener consistencia
             slide.innerHTML = `
-                <img src="${foto.url}" alt="${foto.titulo}" loading="lazy" onclick="FullImg(this.src)">
-                <div class="description-mobile">
-                    <h3>${foto.titulo}</h3>
-                    <p>${foto.descripcion}</p>
-                </div>
+                <figure class="mobile-gallery-image" data-index="${index}" data-category="${foto.categoria}" data-date="${foto.fecha}" data-location="${foto.lugar}">
+                    <img src="${foto.url}" alt="${foto.titulo}" loading="lazy" onclick="FullImg(this.src)">
+                    <div class="image-overlay">
+                        <div class="top-btns">
+                            <button class="favorite-btn" title="Marcar como favorito">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <button class="especial-btn" title="Marcar como especial">
+                                <i class="far fa-star"></i>
+                            </button>
+                        </div>
+                        <div class="info-text">
+                            <span class="fecha">${foto.fecha}</span>
+                            <span class="lugar">${foto.lugar}</span>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <h3>${foto.titulo}</h3>
+                        <p>${foto.descripcion}</p>
+                    </div>
+                </figure>
             `;
             mobileWrapper.appendChild(slide);
         }
@@ -155,11 +172,28 @@ function initMobileSwiper() {
                 slidesPerView: 1,
                 spaceBetween: 20,
                 loop: true,
+                watchOverflow: true,
+                watchSlidesProgress: true,
+                observer: true,
+                observeParents: true,
                 pagination: {
-                    el: '.swiper-pagination',
+                    el: mobileEl.querySelector('.swiper-pagination'),
                     clickable: true,
+                    renderBullet: function (index, className) {
+                        return '<span class="' + className + '"></span>';
+                    }
                 },
+                on: {
+                    init: function () {
+                        try { this.pagination.render(); this.pagination.update(); } catch (e) {}
+                    },
+                    slideChange: function () {
+                        try { this.pagination.update(); } catch (e) {}
+                    }
+                }
             });
+            // Forzar render/update por si el DOM cambió justo antes de la inicialización
+            try { mobileSwiper.pagination.render(); mobileSwiper.pagination.update(); } catch (e) {}
         }
     } else {
         if (mobileSwiper) {

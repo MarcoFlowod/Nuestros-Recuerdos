@@ -27,8 +27,10 @@ class FilterManager {
 
         // Recopilar imágenes de la galería
         this.galleryImages = document.querySelectorAll('.gallery-image');
+        // Recopilar imágenes del swiper móvil
+        this.mobileImages = document.querySelectorAll('.mobile-gallery-image');
 
-        // Configurar botones de favoritos y especiales para cada imagen
+        // Configurar botones de favoritos y especiales para cada imagen (desktop)
         this.galleryImages.forEach((img, index) => {
             const favoriteBtn = img.querySelector('.favorite-btn');
             const specialBtn = img.querySelector('.especial-btn');
@@ -37,6 +39,11 @@ class FilterManager {
                 favoriteBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     this.toggleFavorite(index, img, favoriteBtn, e);
+                    // También actualizar vista móvil si existe
+                    const mobileImg = document.querySelector(`.mobile-gallery-image[data-index="${index}"]`);
+                    if (mobileImg) {
+                        this.updateImageState(index, mobileImg, mobileImg.querySelector('.favorite-btn'), mobileImg.querySelector('.especial-btn'));
+                    }
                 });
             }
 
@@ -44,15 +51,99 @@ class FilterManager {
                 specialBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     this.toggleSpecial(index, img, specialBtn, e);
+                    // También actualizar vista móvil si existe
+                    const mobileImg = document.querySelector(`.mobile-gallery-image[data-index="${index}"]`);
+                    if (mobileImg) {
+                        this.updateImageState(index, mobileImg, mobileImg.querySelector('.favorite-btn'), mobileImg.querySelector('.especial-btn'));
+                    }
                 });
             }
 
-            // Restaurar estados de favoritos y especiales al cargar
+            // Restaurar estados de favoritos y especiales al cargar (desktop)
             this.updateImageState(index, img, favoriteBtn, specialBtn);
+        });
+
+        // Configurar listeners para el carrusel móvil (si existen elementos móviles)
+        this.mobileImages.forEach((mImg) => {
+            const index = parseInt(mImg.dataset.index, 10);
+            const favoriteBtn = mImg.querySelector('.favorite-btn');
+            const specialBtn = mImg.querySelector('.especial-btn');
+
+            if (favoriteBtn) {
+                favoriteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    // Operar sobre el elemento desktop para mantener consistencia
+                    const desktopImg = document.querySelector(`.gallery-image[data-index="${index}"]`);
+                    this.toggleFavorite(index, desktopImg || mImg, desktopImg ? desktopImg.querySelector('.favorite-btn') : favoriteBtn, e);
+                    // Actualizar ambos estados
+                    this.updateImageState(index, desktopImg || mImg, desktopImg ? desktopImg.querySelector('.favorite-btn') : favoriteBtn, desktopImg ? desktopImg.querySelector('.especial-btn') : specialBtn);
+                    this.updateImageState(index, mImg, favoriteBtn, specialBtn);
+                });
+            }
+
+            if (specialBtn) {
+                specialBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const desktopImg = document.querySelector(`.gallery-image[data-index="${index}"]`);
+                    this.toggleSpecial(index, desktopImg || mImg, desktopImg ? desktopImg.querySelector('.especial-btn') : specialBtn, e);
+                    this.updateImageState(index, desktopImg || mImg, desktopImg ? desktopImg.querySelector('.favorite-btn') : favoriteBtn, desktopImg ? desktopImg.querySelector('.especial-btn') : specialBtn);
+                    this.updateImageState(index, mImg, favoriteBtn, specialBtn);
+                });
+            }
+
+            // Restaurar estados al cargar (móvil)
+            this.updateImageState(index, mImg, favoriteBtn, specialBtn);
         });
 
         // Aplicar filtro inicial
         this.applyFilter('all');
+
+        // Configurar listeners para elementos del swiper móvil
+        this.setupMobileListeners();
+    }
+
+    // Configura listeners solo para elementos móviles del swiper (llamable después de re-render)
+    setupMobileListeners() {
+        this.mobileImages = document.querySelectorAll('.mobile-gallery-image');
+        const mobileWrapper = document.getElementById('mobile-swiper-wrapper');
+        this.mobileImages.forEach((mImg) => {
+            const index = parseInt(mImg.dataset.index, 10);
+            const favoriteBtn = mImg.querySelector('.favorite-btn');
+            const specialBtn = mImg.querySelector('.especial-btn');
+
+            // Remover listeners previos si existieran (evitar duplicados)
+            if (favoriteBtn) {
+                favoriteBtn.replaceWith(favoriteBtn.cloneNode(true));
+            }
+            if (specialBtn) {
+                specialBtn.replaceWith(specialBtn.cloneNode(true));
+            }
+
+            const freshFavorite = mImg.querySelector('.favorite-btn');
+            const freshSpecial = mImg.querySelector('.especial-btn');
+
+            if (freshFavorite) {
+                freshFavorite.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const desktopImg = document.querySelector(`.gallery-image[data-index="${index}"]`);
+                    this.toggleFavorite(index, desktopImg || mImg, desktopImg ? desktopImg.querySelector('.favorite-btn') : freshFavorite, e);
+                    this.updateImageState(index, desktopImg || mImg, desktopImg ? desktopImg.querySelector('.favorite-btn') : freshFavorite, desktopImg ? desktopImg.querySelector('.especial-btn') : freshSpecial);
+                    this.updateImageState(index, mImg, freshFavorite, freshSpecial);
+                });
+            }
+            if (freshSpecial) {
+                freshSpecial.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const desktopImg = document.querySelector(`.gallery-image[data-index="${index}"]`);
+                    this.toggleSpecial(index, desktopImg || mImg, desktopImg ? desktopImg.querySelector('.especial-btn') : freshSpecial, e);
+                    this.updateImageState(index, desktopImg || mImg, desktopImg ? desktopImg.querySelector('.favorite-btn') : freshFavorite, desktopImg ? desktopImg.querySelector('.especial-btn') : freshSpecial);
+                    this.updateImageState(index, mImg, freshFavorite, freshSpecial);
+                });
+            }
+
+            // Restaurar estados al cargar (móvil)
+            this.updateImageState(index, mImg, freshFavorite, freshSpecial);
+        });
     }
 
     handleFilterClick(event) {
@@ -90,13 +181,13 @@ class FilterManager {
                     shouldShow = this.specials.includes(index);
                     break;
                 case 'recent':
-                    shouldShow = foto.categoria.includes('recent');
+                    shouldShow = foto.categoria && foto.categoria.includes('recent');
                     break;
                 default:
                     shouldShow = true;
             }
 
-            // Animar la transición
+            // Animar la transición (desktop)
             if (shouldShow) {
                 img.style.display = '';
                 setTimeout(() => img.classList.add('show'), 10);
@@ -110,7 +201,40 @@ class FilterManager {
                     }
                 }, 300);
             }
+
+            // Controlar también el slide móvil correspondiente (si existe)
+            const mobileWrapper = document.getElementById('mobile-swiper-wrapper');
+            const mobileImg = document.querySelector(`.mobile-gallery-image[data-index="${index}"]`);
+            const slide = mobileImg ? mobileImg.closest('.swiper-slide') : null;
+
+            if (shouldShow) {
+                // si estaba removido anteriormente, volver a anexarlo
+                if (!slide && window._removedMobileSlides && window._removedMobileSlides[index]) {
+                    mobileWrapper.appendChild(window._removedMobileSlides[index]);
+                    delete window._removedMobileSlides[index];
+                } else if (slide) {
+                    slide.style.display = '';
+                }
+            } else {
+                // remover del DOM para que Swiper no lo cuente en paginación
+                if (slide) {
+                    window._removedMobileSlides = window._removedMobileSlides || {};
+                    window._removedMobileSlides[index] = slide;
+                    slide.remove();
+                }
+            }
         });
+
+        // Re-inicializar Swiper móvil para que la paginación refleje los slides visibles
+        try {
+            if (typeof mobileSwiper !== 'undefined' && mobileSwiper) {
+                mobileSwiper.destroy(true, true);
+            }
+        } catch (e) {}
+        mobileSwiper = null;
+        try { if (typeof initMobileSwiper === 'function') initMobileSwiper(); } catch (e) {}
+        // Reconfigurar listeners móviles para los slides que queden
+        this.setupMobileListeners();
     }
 
     toggleFavorite(index, imgElement, favoriteBtn, event) {
