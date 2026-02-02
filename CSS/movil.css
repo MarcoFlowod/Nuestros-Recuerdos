@@ -133,6 +133,11 @@
     .mobile-gallery-image .info-text {
         pointer-events: auto;
     }
+
+    .mobile-gallery-image .image-container {
+        position: relative;
+    }
+
     .mobile-gallery-image .top-btns {
         display: flex;
         gap: var(--spacing-sm);
@@ -148,12 +153,19 @@
     }
 
     .mobile-gallery-image .info-text {
-        margin: 0;
+        position: absolute;
+        bottom: 2px;
         display: flex;
         gap: 8px;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 100px;
+        margin: 0;
+        pointer-events: auto;
+        padding: 6px 8px;
+        border-radius: 6px;
+        opacity: 1; /* visible en móvil */
+        transform: none;
+        transition: none;
     }
 
     .mobile-gallery-image .fecha,
@@ -181,6 +193,7 @@
         color: var(--text-muted);
         font-size: var(--font-size-base);
         line-height: 1.4;
+        font-family: sans-serif, Geneva, Verdana, sans-serif;
     }
 
     /* Control visual al tocar: no transformar en móvil */

@@ -1,4 +1,3 @@
-// Datos de todas las fotos
 const fotos = [
     {
         url: "https://raw.githubusercontent.com/MarcoFlowod/Proyectos-para-dedicar/main/Proyectos%E2%99%A5/imagenes/img1.webp",
@@ -129,7 +128,13 @@ function generarGaleria() {
             // Usar una estructura similar al template para mantener consistencia
             slide.innerHTML = `
                 <figure class="mobile-gallery-image" data-index="${index}" data-category="${foto.categoria}" data-date="${foto.fecha}" data-location="${foto.lugar}">
-                    <img src="${foto.url}" alt="${foto.titulo}" loading="lazy" onclick="FullImg(this.src)">
+                    <div class="image-container">
+                        <img src="${foto.url}" alt="${foto.titulo}" loading="lazy" onclick="FullImg(this.src)">
+                        <div class="info-text">
+                            <span class="fecha">${foto.fecha}</span>
+                            <span class="lugar">${foto.lugar}</span>
+                        </div>
+                    </div>
                     <div class="image-overlay">
                         <div class="top-btns">
                             <button class="favorite-btn" title="Marcar como favorito">
@@ -138,10 +143,6 @@ function generarGaleria() {
                             <button class="especial-btn" title="Marcar como especial">
                                 <i class="far fa-star"></i>
                             </button>
-                        </div>
-                        <div class="info-text">
-                            <span class="fecha">${foto.fecha}</span>
-                            <span class="lugar">${foto.lugar}</span>
                         </div>
                     </div>
                     <div class="description">

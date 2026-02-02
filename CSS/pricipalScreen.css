@@ -288,6 +288,25 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
 }
+.icon-add-image {
+    width: 20px; 
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.icon-add-image .stroke-color {
+    stroke: currentColor;
+}
+
+.icon-add-image .fill-color {
+    fill: currentColor;
+}
+
+.icon-add-image path,
+.icon-add-image circle,
+.icon-add-image rect {
+    transition: all var(--transition-speed) ease;
+}
 
 .back-home-btn .btn-text {
     display: inline;
@@ -464,7 +483,8 @@ body {
     position: relative;
     transition: all 0.3s ease;
     cursor: pointer;
-    border: none;
+    border: 1px solid var(--border-color);
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 8px;
     border-radius: 50%;
     display: flex;
@@ -475,12 +495,11 @@ body {
 }
 
 .favorite-btn {
-    background: transparent;
     color: var(--primary-color);
 }
 
 .favorite-btn:hover {
-    background: var(--shadow-glow-light);
+    background: rgba(255, 59, 59, 0.5);
     transform: scale(1.1);
 }
 
@@ -489,7 +508,6 @@ body {
 }
 
 .especial-btn {
-    background: transparent;
     color: #f6ee12;
 }
 
@@ -505,22 +523,54 @@ body {
 }
 
 
+.image-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: var(--image-height-md);
+    object-fit: cover;
+    display: block;
+    transition: transform var(--transition-medium) ease;
+}
+
+/* Info oculto por defecto en escritorio; aparecerá al hacer hover/focus */
 .info-text {
-    color: #fff;
+    position: absolute;
+    bottom: 5px;
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: space-between;
     gap: var(--spacing-sm);
-    font-size: var(--font-size-base);
-    margin: var(--spacing-lg);
-    margin-bottom: 9rem;
+    font-size: var(--font-size-sm);
+    color: #fff;
+    width: 100%;
+    padding: 0px 5px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 200ms var(--easing-in-out), transform 200ms var(--easing-in-out);
+}
+
+/* Mostrar info cuando el usuario pasa el mouse por la imagen o cuando recibe foco */
+.image-container:hover .info-text,
+.gallery-image:hover .image-container .info-text,
+.image-container:focus-within .info-text,
+.gallery-image:focus-within .info-text {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .fecha,
 .lugar {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 4px 8px;
     font-size: var(--font-size-sm);
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--text-light);
 }
 
 /* Estilos para figcaption (nuevo en galería dinámmica) */
@@ -851,4 +901,3 @@ a:focus-visible {
     }
 }
 /* Estilos para botones de favoritos y especiales */
-
