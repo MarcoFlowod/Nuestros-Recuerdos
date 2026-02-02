@@ -378,6 +378,10 @@ body {
     border-radius: var(--border-radius-xl);
     margin: 0 auto;
 }
+.gallery-grid :active {
+    background: red;
+}
+
 
 .gallery-image {
     background: rgba(255, 255, 255, 0.05);
@@ -522,7 +526,6 @@ body {
     font-size: var(--font-size-sm);
     color: rgba(255, 255, 255, 0.8);
 }
-
 
 /* Estilos para figcaption (nuevo en galería dinámmica) */
 .description {
