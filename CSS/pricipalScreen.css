@@ -378,10 +378,6 @@ body {
     border-radius: var(--border-radius-xl);
     margin: 0 auto;
 }
-.gallery-grid :active {
-    background: red;
-}
-
 
 .gallery-image {
     background: rgba(255, 255, 255, 0.05);

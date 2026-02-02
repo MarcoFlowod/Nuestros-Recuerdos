@@ -166,6 +166,7 @@
     }
 
     .mobile-gallery-image .description {
+        position: relative;
         padding: var(--spacing-lg);
         text-align: center;
     }
@@ -196,6 +197,7 @@
     .mobile-swiper .description-mobile {
         display: none; /* usamos la estructura completa en el slide */
     }
+
 
     .special-message {
         margin-top: 10px;
