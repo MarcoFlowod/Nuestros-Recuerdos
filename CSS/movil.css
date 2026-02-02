@@ -201,6 +201,13 @@
         margin-top: 10px;
     }
 
+    .full-img img {
+        border-radius: 10px;
+    }
+    .full-img span {
+        left: 5%;
+    }
+
 }
 
 

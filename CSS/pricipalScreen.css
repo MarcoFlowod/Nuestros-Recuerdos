@@ -618,6 +618,7 @@ body {
 .full-img img {
     max-width: 90%;
     max-height: 80%;
+    border-radius: 10px;
 }
 .full-img span {
     position: absolute;
