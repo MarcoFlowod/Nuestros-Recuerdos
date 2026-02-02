@@ -263,50 +263,6 @@ body {
     gap: var(--spacing-lg);
 }
 
-.control-btn {
-    width: var(--btn-medium-size);
-    height: var(--btn-medium-size);
-    border-radius: var(--border-radius-full);
-    background: rgba(255, 255, 255, 0.2);
-    border: var(--border-width-medium) solid white;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--font-size-lg);
-    transition: all var(--transition-speed) ease;
-    position: relative;
-}
-
-.control-btn:hover {
-    background: white;
-    color: var(--primary-color);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
-}
-
-.control-btn .tooltip {
-    position: absolute;
-    bottom: calc(-1 * var(--spacing-2xl));
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--border-radius-sm);
-    font-size: var(--font-size-sm);
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: all var(--transition-speed) ease;
-}
-
-.control-btn:hover .tooltip {
-    opacity: 1;
-    visibility: visible;
-}
-
 .back-home-btn {
     background: rgba(255, 255, 255, 0.2);
     border: var(--border-width-medium) solid white;
@@ -407,7 +363,7 @@ body {
     font-size: 0.9rem;
 }
 
-/* ========== ITEMS DE GALERÍA ========== */
+/* ========== MAIN ========== */
 .gallery-container {
     padding: 20px;
 }

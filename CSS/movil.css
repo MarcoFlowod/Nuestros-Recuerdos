@@ -3,6 +3,60 @@
 }
 
 @media (max-width: 768px) {
+    .gallery-title {
+        font-size: var(--font-size-xl); 
+    }
+    .header-top {
+        padding: 15px 5px;
+    }
+    /* Mostrar solo icono en el botón volver en pantallas móviles (≤768px) 🔧 */
+    .back-home-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 6px;
+        border: none;
+        background: transparent;
+        gap: 0;
+        min-width: 20px;
+        font-size: 0; /* Oculta el texto visualmente */
+        line-height: 0;
+        padding-top: 10px;
+    }
+
+    #addBtn {
+        border-left: red solid 2px;
+    }
+
+    #backToHome {
+        border-right: red solid 2px;
+    }
+    /* Restaurar tamaño visual del icono (font o svg) */
+    .back-home-btn i,
+    .back-home-btn svg,
+    .back-home-btn .icon {
+        font-size: var(--font-size-xl);
+        width: var(--icon-size, 24px);
+        height: var(--icon-size, 24px);
+        line-height: 1;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    /* Si el texto viene en un span con clase .btn-text o .text, ocultarlo accesiblemente */
+    .back-home-btn .btn-text,
+    .back-home-btn .text {
+        position: absolute !important;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
+        padding: 0;
+        margin: -1px;
+    }
+    
     .gallery-grid {
         display: none;
     }
@@ -12,8 +66,8 @@
         width: 100%;
         height: auto;
         padding: 0 8px;
-        margin: calc(var(--header-height) + 8px) 0 20px 0;
-        z-index: 20; /* asegurarse que quede por encima de fondos */
+        margin: 40px auto;
+        z-index: 20;
     }
     .mobile-swiper .swiper-slide {
         display: flex;
@@ -98,7 +152,8 @@
         display: flex;
         gap: 8px;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
+        margin-bottom: 100px;
     }
 
     .mobile-gallery-image .fecha,
@@ -140,6 +195,10 @@
 
     .mobile-swiper .description-mobile {
         display: none; /* usamos la estructura completa en el slide */
+    }
+
+    .special-message {
+        margin-top: 10px;
     }
 
 }
