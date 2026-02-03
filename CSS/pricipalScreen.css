@@ -677,6 +677,28 @@ body {
     color: #fff;
     cursor: pointer;
 }
+/* Botón para eliminar imagen dentro del modal */
+.full-img .modal-btn {
+    position: absolute;
+    top: 18px;
+    font-size: 18px;
+    color: #fff;
+    background: rgba(255,85,85,0.12);
+    border: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.full-img .modal-btn:hover {
+    background: rgba(255,85,85,0.22);
+}
+.full-img .delete-btn {
+    right: 36%;
+}
+.full-img .modal-btn i { font-size: 18px; }
 
 /* ========== ANIMACIONES ADICIONALES ========== */
 @keyframes pulse {

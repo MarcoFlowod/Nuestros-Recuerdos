@@ -3,8 +3,9 @@
 class FilterManager {
     constructor() {
         this.currentFilter = 'all';
-        this.favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        this.specials = JSON.parse(localStorage.getItem('specials')) || [];
+        // Normalizar a números para evitar comparación string/number
+        this.favorites = (JSON.parse(localStorage.getItem('favorites')) || []).map(i => parseInt(i, 10)).filter(i => !Number.isNaN(i));
+        this.specials = (JSON.parse(localStorage.getItem('specials')) || []).map(i => parseInt(i, 10)).filter(i => !Number.isNaN(i));
         this.galleryImages = [];
         this.init();
     }
@@ -31,7 +32,9 @@ class FilterManager {
         this.mobileImages = document.querySelectorAll('.mobile-gallery-image');
 
         // Configurar botones de favoritos y especiales para cada imagen (desktop)
-        this.galleryImages.forEach((img, index) => {
+        this.galleryImages.forEach((img) => {
+            // Preferir data-index si fue asignado por el renderizador (más estable que el índice del NodeList)
+            const index = typeof img.dataset.index !== 'undefined' ? parseInt(img.dataset.index, 10) : Array.prototype.indexOf.call(this.galleryImages, img);
             const favoriteBtn = img.querySelector('.favorite-btn');
             const specialBtn = img.querySelector('.especial-btn');
 
@@ -248,10 +251,13 @@ class FilterManager {
                 if (imgEl) {
                     const newImg = imgEl.cloneNode(true);
                     imgEl.replaceWith(newImg);
-                    newImg.addEventListener('click', (e) => {
+                    const openHandler = (e) => {
                         e.stopPropagation();
                         try { FullImg(newImg.src); } catch (err) { console.warn('FullImg no disponible', err); }
-                    });
+                    };
+                    newImg.addEventListener('click', openHandler);
+                    newImg.addEventListener('pointerup', openHandler);
+                    newImg.addEventListener('touchend', (e) => { e.preventDefault(); openHandler(e); }, { passive: false });
                 }
 
                 mImg.addEventListener('click', (e) => {
@@ -288,9 +294,17 @@ class FilterManager {
         this.currentFilter = filterType;
         console.log(`[FilterManager] Aplicando filtro: ${filterType}`);
 
-        this.galleryImages.forEach((img, index) => {
-            const foto = fotos[index];
+        const now = Date.now();
+        const THIRTY_DAYS = 1000 * 60 * 60 * 24 * 30;
+
+        this.galleryImages.forEach((img, i) => {
+            // Preferir data-index (estable) sobre el índice del NodeList
+            const index = typeof img.dataset.index !== 'undefined' ? parseInt(img.dataset.index, 10) : i;
             let shouldShow = false;
+
+            // Intentar obtener timestamp si fue asignado en el render
+            const ts = img.dataset.timestamp ? parseInt(img.dataset.timestamp, 10) : null;
+            const isRecent = ts ? (now - ts) <= THIRTY_DAYS : false;
 
             switch (filterType) {
                 case 'all':
@@ -303,7 +317,8 @@ class FilterManager {
                     shouldShow = this.specials.includes(index);
                     break;
                 case 'recent':
-                    shouldShow = foto.categoria && foto.categoria.includes('recent');
+                    // Si no hay timestamp, conservadoramente no mostrar como 'recent'
+                    shouldShow = isRecent;
                     break;
                 default:
                     shouldShow = true;

@@ -113,6 +113,24 @@ class AddMemoryScreen {
         this.uploadPlaceholder.style.display = 'block';
     }
 
+    // Mostrar u ocultar modal de carga
+    showLoading(isVisible) {
+        if (!this.loadingModal) return;
+        this.loadingModal.style.display = isVisible ? 'flex' : 'none';
+    }
+
+    // Mostrar mensaje de éxito
+    showSuccessMessage() {
+        if (!this.successMessage) return;
+        this.successMessage.style.display = 'block';
+        // Opcional: resetear formulario y volver a la galería después de un tiempo
+        this.form.reset();
+        this.removeImage();
+        setTimeout(() => {
+            this.successMessage.style.display = 'none';
+        }, 2000);
+    }
+
     toggleFavorite() {
         this.isFavorite = !this.isFavorite;
         const btn = document.getElementById('markFavoriteBtn');
@@ -171,11 +189,14 @@ class AddMemoryScreen {
         formData.append('file', file);
         
         // El nombre exacto del preset que creamos en el paso anterior
-        formData.append('upload_preset', 'galeria_preset'); 
+        const uploadPreset = 'galeria_preset';
+        formData.append('upload_preset', uploadPreset);
 
         // Reemplaza 'TU_CLOUD_NAME' con tu Cloud Name real
         const cloudName = 'dydxpxb5i'; 
         const endpoint = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
+        console.debug('Cloudinary upload', { endpoint, uploadPreset, fileName: file.name, fileType: file.type });
 
         try {
             const response = await fetch(endpoint, {
@@ -184,8 +205,10 @@ class AddMemoryScreen {
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error.message);
+                const text = await response.text();
+                let errorMsg = text;
+                try { errorMsg = JSON.parse(text).error.message; } catch (e) { /* no-op */ }
+                throw new Error(errorMsg || 'Error al subir a Cloudinary');
             }
 
             const data = await response.json();
