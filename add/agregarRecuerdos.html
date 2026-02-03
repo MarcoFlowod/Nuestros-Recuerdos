@@ -4,23 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Recuerdos</title>
-    <!-- Usar las mismas fuentes que tu proyecto principal -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../CSS/principalScreen.css">
     <link rel="stylesheet" href="../CSS/movil.css">
-    <!-- Nuevo CSS específico para esta pantalla -->
-    <link rel="stylesheet" href="../CSS/addScreen.css">
+    <link rel="stylesheet" href="../CSS/Screen.css">
 </head>
-<body>    
-    <!-- Contenedor principal -->
+<body>
     <div class="add-memories-screen">
-        <!-- Header -->
         <header class="add-header">
             <button id="backBtn" class="back-home-btn" onclick="window.location.href='../index.html'">
                 <i class="fas fa-arrow-left"></i>
                 <span class="btn-text">Volver</span>
             </button>
-            
             <h1 class="add-title">
                 <i class="fas fa-heart heart-icon"></i> 
                 Agregar Nuevo Recuerdo
@@ -28,14 +23,10 @@
             </h1>
         </header>
 
-        <!-- Formulario -->
         <main class="add-form-container">
             <form id="memoryForm" class="memory-form">
-                <!-- Sección de imagen -->
                 <div class="form-section">
-                    <label for="imageUpload" class="form-label">
-                        <i class="fas fa-image"></i> Imagen del Recuerdo
-                    </label>
+                    <label class="form-label"><i class="fas fa-image"></i> Imagen del Recuerdo</label>
                     <div class="image-upload-area" id="imageDropZone">
                         <div class="upload-placeholder" id="uploadPlaceholder">
                             <i class="fas fa-cloud-upload-alt"></i>
@@ -52,46 +43,30 @@
                     </div>
                 </div>
 
-                <!-- Sección de detalles -->
                 <div class="form-section">
                     <div class="form-group">
-                        <label for="memoryTitle" class="form-label">
-                            <i class="fas fa-heading"></i> Título
-                        </label>
-                        <input type="text" id="memoryTitle" class="form-input" 
-                               placeholder="Escribe un título especial..." required>
+                        <label for="memoryTitle" class="form-label"><i class="fas fa-heading"></i> Título</label>
+                        <input type="text" id="memoryTitle" class="form-input" placeholder="Escribe un título especial..." required>
                     </div>
 
                     <div class="form-group">
-                        <label for="memoryDescription" class="form-label">
-                            <i class="fas fa-align-left"></i> Descripción
-                        </label>
-                        <textarea id="memoryDescription" class="form-textarea" 
-                                  rows="4" placeholder="Describe este momento especial..."></textarea>
+                        <label for="memoryDescription" class="form-label"><i class="fas fa-align-left"></i> Descripción</label>
+                        <textarea id="memoryDescription" class="form-textarea" rows="4" placeholder="Describe este momento especial..."></textarea>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group half">
-                            <label for="memoryDate" class="form-label">
-                                <i class="fas fa-calendar"></i> Fecha
-                            </label>
+                            <label for="memoryDate" class="form-label"><i class="fas fa-calendar"></i> Fecha</label>
                             <input type="date" id="memoryDate" class="form-input" required>
                         </div>
-
                         <div class="form-group half">
-                            <label for="memoryLocation" class="form-label">
-                                <i class="fas fa-map-marker-alt"></i> Lugar
-                            </label>
-                            <input type="text" id="memoryLocation" class="form-input" 
-                                   placeholder="¿Dónde fue este momento?">
+                            <label for="memoryLocation" class="form-label"><i class="fas fa-map-marker-alt"></i> Lugar</label>
+                            <input type="text" id="memoryLocation" class="form-input" placeholder="¿Dónde fue?">
                         </div>
                     </div>
 
-                    <!-- Opciones adicionales -->
                     <div class="form-section">
-                        <label class="form-label">
-                            <i class="fas fa-star"></i> Opciones especiales (no obligatorias)
-                        </label>
+                        <label class="form-label"><i class="fas fa-star"></i> Opciones especiales</label>
                         <div class="option-buttons">
                             <button type="button" class="option-btn" id="markFavoriteBtn">
                                 <i class="far fa-heart"></i> Favorito
@@ -103,7 +78,6 @@
                     </div>
                 </div>
 
-                <!-- Botones de acción -->
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary" id="saveBtn">
                         <i class="fas fa-save"></i> Guardar Recuerdo
@@ -115,28 +89,25 @@
             </form>
         </main>
 
-        <!-- Mensaje de confirmación (oculto por defecto) -->
         <div class="success-message" id="successMessage" style="display: none;">
             <div class="success-content">
                 <i class="fas fa-check-circle"></i>
                 <h3>¡Recuerdo guardado!</h3>
-                <p>Tu recuerdo especial ha sido agregado a la galería.</p>
-                <button class="btn btn-primary" onclick="window.location.href='../index.html'">
-                    Ver Galería
-                </button>
+                <p>Tu recuerdo se ha subido a la nube.</p>
+                <button class="btn btn-primary" onclick="window.location.href='../index.html'">Ver Galería</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal de carga -->
     <div class="loading-modal" id="loadingModal" style="display: none;">
         <div class="loading-content">
             <div class="spinner"></div>
-            <p>Guardando recuerdo...</p>
+            <p id="loadingText">Subiendo imagen a la nube...</p>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script src="../JS/addScreen.js"></script>
 </body>

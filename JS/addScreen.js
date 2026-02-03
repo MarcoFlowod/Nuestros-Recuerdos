@@ -1,4 +1,21 @@
-// JS/addScreen.js
+// ==========================================
+// 1. CONFIGURACIÓN DE FIREBASE (Tus credenciales reales)
+// ==========================================
+const firebaseConfig = {
+  apiKey: "AIzaSyAyKDAsA0knWhyzM2mTg44sO3gnb_eoFVE",
+  authDomain: "galeria-preset.firebaseapp.com",
+  databaseURL: "https://galeria-preset-default-rtdb.firebaseio.com",
+  projectId: "galeria-preset",
+  storageBucket: "galeria-preset.firebasestorage.app",
+  messagingSenderId: "679060061909",
+  appId: "1:679060061909:web:bf3e21d22ce16dd7c8ec5c",
+  measurementId: "G-ZMBFW4JGLC"
+};
+
+// Inicializar Firebase en modo compatibilidad
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
 class AddMemoryScreen {
     constructor() {
         this.form = document.getElementById('memoryForm');
@@ -13,356 +30,177 @@ class AddMemoryScreen {
         
         this.isFavorite = false;
         this.isSpecial = false;
-        this.currentImage = null;
+        this.currentImageFile = null; 
         
         this.init();
     }
 
     init() {
         this.setupEventListeners();
-        this.setupCanvas();
-        this.setupHeartRain();
         this.setupDatePicker();
     }
 
     setupEventListeners() {
-        // Subida de imagen
+        // Clic para subir
         this.imageDropZone.addEventListener('click', () => this.imageUpload.click());
-        this.imageUpload.addEventListener('change', (e) => this.handleImageUpload(e));
-        this.removeImageBtn.addEventListener('click', () => this.removeImage());
         
-        // Drag and drop
+        // Selección de archivo
+        this.imageUpload.addEventListener('change', (e) => this.handleImageFile(e.target.files[0]));
+        
+        // Botón remover imagen
+        this.removeImageBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.removeImage();
+        });
+
+        // --- FUNCIONALIDAD DRAG & DROP ---
         this.imageDropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             this.imageDropZone.style.borderColor = 'var(--primary-color)';
             this.imageDropZone.style.background = 'rgba(255, 85, 85, 0.1)';
         });
-        
+
         this.imageDropZone.addEventListener('dragleave', () => {
-            this.imageDropZone.style.borderColor = 'var(--add-border)';
+            this.imageDropZone.style.borderColor = 'rgba(255, 255, 255, 0.1)';
             this.imageDropZone.style.background = 'rgba(255, 255, 255, 0.05)';
         });
-        
+
         this.imageDropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            this.imageDropZone.style.borderColor = 'var(--add-border)';
+            this.imageDropZone.style.borderColor = 'rgba(255, 255, 255, 0.1)';
             this.imageDropZone.style.background = 'rgba(255, 255, 255, 0.05)';
-            
             const file = e.dataTransfer.files[0];
-            if (file && file.type.startsWith('image/')) {
-                this.handleImageFile(file);
-            }
+            this.handleImageFile(file);
         });
-        
+
         // Botones de opciones
-        document.getElementById('markFavoriteBtn').addEventListener('click', () => {
-            this.toggleFavorite();
-        });
-        
-        document.getElementById('markSpecialBtn').addEventListener('click', () => {
-            this.toggleSpecial();
-        });
-        
+        document.getElementById('markFavoriteBtn').addEventListener('click', () => this.toggleFavorite());
+        document.getElementById('markSpecialBtn').addEventListener('click', () => this.toggleSpecial());
+
         // Formulario
         this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-        
-        // Botón cancelar
+
+        // Cancelar
         document.getElementById('cancelBtn').addEventListener('click', () => {
-            if (confirm('¿Seguro que quieres cancelar? Se perderán los datos no guardados.')) {
-                window.location.href = '../index.html';
-            }
+            if (confirm('¿Seguro que quieres salir?')) window.location.href = '../index.html';
         });
-    }
-
-    setupCanvas() {
-        const canvas = document.getElementById('loveRainCanvas');
-        if (canvas) {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            const ctx = canvas.getContext('2d');
-            
-            // Efecto de partículas simple
-            function drawParticles() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                // Dibujar estrellas de fondo
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-                for (let i = 0; i < 50; i++) {
-                    const x = Math.random() * canvas.width;
-                    const y = Math.random() * canvas.height;
-                    const size = Math.random() > 0.9 ? 2 : 1;
-                    ctx.fillRect(x, y, size, size);
-                }
-                
-                requestAnimationFrame(drawParticles);
-            }
-            
-            drawParticles();
-            
-            window.addEventListener('resize', () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            });
-        }
-    }
-
-    setupHeartRain() {
-        const container = document.getElementById('rainEffect');
-        if (!container) return;
-        
-        const hearts = ["❤️", "💕", "💖", "💘", "💝", "♥", "♡"];
-        
-        function createHeart() {
-            const heart = document.createElement("span");
-            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
-            
-            heart.style.position = 'fixed';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.top = '-50px';
-            heart.style.fontSize = Math.random() * 20 + 15 + 'px';
-            heart.style.opacity = Math.random() * 0.5 + 0.3;
-            heart.style.color = '#ff5555';
-            heart.style.zIndex = '1';
-            heart.style.pointerEvents = 'none';
-            heart.style.animation = `fall ${Math.random() * 3 + 5}s linear forwards`;
-            
-            container.appendChild(heart);
-            
-            setTimeout(() => heart.remove(), 8000);
-        }
-        
-        setInterval(createHeart, 500);
     }
 
     setupDatePicker() {
-        // Establecer fecha actual por defecto
         const dateInput = document.getElementById('memoryDate');
         const today = new Date().toISOString().split('T')[0];
         dateInput.value = today;
-        dateInput.max = today; // No permitir fechas futuras
-    }
-
-    handleImageUpload(event) {
-        const file = event.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-            this.handleImageFile(file);
-        }
+        dateInput.max = today;
     }
 
     handleImageFile(file) {
-        const reader = new FileReader();
-        
-        reader.onload = (e) => {
-            this.currentImage = {
-                file: file,
-                url: e.target.result
+        if (file && file.type.startsWith('image/')) {
+            this.currentImageFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.previewImage.src = e.target.result;
+                this.uploadPlaceholder.style.display = 'none';
+                this.imagePreview.style.display = 'block';
             };
-            
-            this.showPreview(e.target.result);
-        };
-        
-        reader.readAsDataURL(file);
-    }
-
-    showPreview(imageUrl) {
-        this.previewImage.src = imageUrl;
-        this.uploadPlaceholder.style.display = 'none';
-        this.imagePreview.style.display = 'block';
+            reader.readAsDataURL(file);
+        }
     }
 
     removeImage() {
-        this.currentImage = null;
+        this.currentImageFile = null;
         this.imageUpload.value = '';
         this.imagePreview.style.display = 'none';
         this.uploadPlaceholder.style.display = 'block';
     }
 
     toggleFavorite() {
-        const btn = document.getElementById('markFavoriteBtn');
         this.isFavorite = !this.isFavorite;
-        
-        if (this.isFavorite) {
-            btn.classList.add('active');
-            btn.innerHTML = '<i class="fas fa-heart"></i> Favorito';
-            this.createConfettiEffect('#ff5555');
-        } else {
-            btn.classList.remove('active');
-            btn.innerHTML = '<i class="far fa-heart"></i> Favorito';
-        }
+        const btn = document.getElementById('markFavoriteBtn');
+        btn.classList.toggle('active', this.isFavorite);
+        btn.innerHTML = `<i class="${this.isFavorite ? 'fas' : 'far'} fa-heart"></i> Favorito`;
     }
 
     toggleSpecial() {
-        const btn = document.getElementById('markSpecialBtn');
         this.isSpecial = !this.isSpecial;
-        
-        if (this.isSpecial) {
-            btn.classList.add('active');
-            btn.innerHTML = '<i class="fas fa-star"></i> Especial';
-            this.createConfettiEffect('#ffaa00');
-        } else {
-            btn.classList.remove('active');
-            btn.innerHTML = '<i class="far fa-star"></i> Especial';
-        }
+        const btn = document.getElementById('markSpecialBtn');
+        btn.classList.toggle('active', this.isSpecial);
+        btn.innerHTML = `<i class="${this.isSpecial ? 'fas' : 'far'} fa-star"></i> Especial`;
     }
 
-    createConfettiEffect(color) {
-        if (typeof confetti === 'function') {
-            confetti({
-                particleCount: 50,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: [color]
-            });
-        }
-    }
-
-    validateForm() {
-        const title = document.getElementById('memoryTitle').value.trim();
-        const date = document.getElementById('memoryDate').value;
-        
-        if (!title) {
-            alert('Por favor, ingresa un título para el recuerdo.');
-            return false;
-        }
-        
-        if (!date) {
-            alert('Por favor, selecciona una fecha.');
-            return false;
-        }
-        
-        if (!this.currentImage) {
-            alert('Por favor, selecciona una imagen para el recuerdo.');
-            return false;
-        }
-        
-        return true;
-    }
-
-    handleSubmit(event) {
+    async handleSubmit(event) {
         event.preventDefault();
         
-        if (!this.validateForm()) {
-            return;
-        }
-        
+        if (!this.currentImageFile) return alert("Por favor, selecciona una imagen.");
+
         this.showLoading(true);
-        
-        // Simular procesamiento (en un caso real, aquí subirías la imagen a un servidor)
-        setTimeout(() => {
-            const memory = this.createMemoryObject();
-            this.saveMemory(memory);
+
+        try {
+            // 1. Subir a Cloudinary
+            // REEMPLAZA 'TU_CLOUD_NAME' con tu nombre de usuario de Cloudinary
+            const imageUrl = await this.uploadToCloudinary(this.currentImageFile);
+
+            // 2. Guardar en Firebase
+            const memory = {
+                url: imageUrl,
+                titulo: document.getElementById('memoryTitle').value.trim(),
+                descripcion: document.getElementById('memoryDescription').value.trim(),
+                fecha: document.getElementById('memoryDate').value,
+                lugar: document.getElementById('memoryLocation').value.trim() || "Lugar Especial",
+                isFavorite: this.isFavorite,
+                isSpecial: this.isSpecial,
+                timestamp: Date.now()
+            };
+
+            await database.ref('recuerdos').push(memory);
+
             this.showLoading(false);
             this.showSuccessMessage();
-        }, 1500);
-    }
+            if (typeof confetti === 'function') confetti();
 
-    createMemoryObject() {
-        // Crear un ID único
-        const id = Date.now() + Math.random().toString(36).substr(2, 9);
-        
-        // Obtener datos del formulario
-        return {
-            id: id,
-            url: this.currentImage.url, // En producción, sería una URL del servidor
-            titulo: document.getElementById('memoryTitle').value.trim(),
-            descripcion: document.getElementById('memoryDescription').value.trim(),
-            fecha: this.formatDate(document.getElementById('memoryDate').value),
-            lugar: document.getElementById('memoryLocation').value.trim(),
-            categoria: this.getCategories(),
-            fechaCreacion: new Date().toISOString(),
-            metadata: {
-                isFavorite: this.isFavorite,
-                isSpecial: this.isSpecial
-            }
-        };
-    }
-
-    formatDate(dateString) {
-        const date = new Date(dateString);
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
-    }
-
-    getCategories() {
-        const categories = [];
-        if (this.isFavorite) categories.push('favorite');
-        if (this.isSpecial) categories.push('special');
-        return categories.join(' ');
-    }
-
-    saveMemory(memory) {
-        try {
-            // 1. Guardar en localStorage (para persistencia temporal)
-            const memories = JSON.parse(localStorage.getItem('userMemories')) || [];
-            memories.push(memory);
-            localStorage.setItem('userMemories', JSON.stringify(memories));
-            
-            // 2. Agregar a la galería principal (global)
-            if (window.fotos && Array.isArray(window.fotos)) {
-                window.fotos.unshift(memory); // Agregar al inicio
-            }
-            
-            // 3. Actualizar contador en el almacenamiento principal
-            const galleryData = JSON.parse(localStorage.getItem('galleryData')) || { count: 0, lastUpdate: null };
-            galleryData.count = (galleryData.count || 0) + 1;
-            galleryData.lastUpdate = new Date().toISOString();
-            localStorage.setItem('galleryData', JSON.stringify(galleryData));
-            
-            console.log('Recuerdo guardado:', memory);
-            return true;
         } catch (error) {
-            console.error('Error al guardar el recuerdo:', error);
-            return false;
+            this.showLoading(false);
+            console.error(error);
+            alert("Error al guardar: " + error.message);
         }
     }
 
-    showLoading(show) {
-        this.loadingModal.style.display = show ? 'flex' : 'none';
-    }
-
-    showSuccessMessage() {
-        this.successMessage.style.display = 'flex';
+    async uploadToCloudinary(file) {
+        const formData = new FormData();
         
-        // Efecto de confeti al guardar exitosamente
-        if (typeof confetti === 'function') {
-            confetti({
-                particleCount: 150,
-                spread: 100,
-                origin: { y: 0.6 }
-            });
-        }
+        // El archivo binario que capturaste con el input o drag & drop
+        formData.append('file', file);
         
-        // Opcional: Reproducir sonido de éxito
-        this.playSuccessSound();
-    }
+        // El nombre exacto del preset que creamos en el paso anterior
+        formData.append('upload_preset', 'galeria_preset'); 
 
-    playSuccessSound() {
+        // Reemplaza 'TU_CLOUD_NAME' con tu Cloud Name real
+        const cloudName = 'dydxpxb5i'; 
+        const endpoint = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
         try {
-            const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
-            audio.volume = 0.3;
-            audio.play();
-        } catch (e) {
-            console.log('No se pudo reproducir sonido:', e);
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error.message);
+            }
+
+            const data = await response.json();
+            
+            // Esta es la URL pública que guardaremos en Firebase
+            return data.secure_url; 
+            
+        } catch (error) {
+            console.error("Error en Cloudinary:", error);
+            throw error;
         }
     }
 }
 
-// Inicializar cuando el DOM esté listo
+// Inicializar
 document.addEventListener('DOMContentLoaded', () => {
-    window.addMemoryScreen = new AddMemoryScreen();
-    console.log('[AddMemoryScreen] Inicializado');
+    new AddMemoryScreen();
 });
-
-// Añadir animación de caída para corazones
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes fall {
-        to {
-            transform: translateY(100vh) rotate(360deg);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
