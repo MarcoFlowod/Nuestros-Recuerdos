@@ -1,0 +1,310 @@
+/* ============================================================
+   addScreen.css - DISEÑO PROFESIONAL "LOVE GLASS"
+   ============================================================ */
+
+:root {
+    /* Paleta de colores */
+    --primary-color: #FF5555;
+    --primary-light: #FF7B7B;
+    --primary-dark: #C43F3F;
+    --secondary-color: #FFCC44;
+    
+    /* Fondo con capas de profundidad */
+    --bg-dark: radial-gradient(circle at 0% 0%, rgba(255,85,85,0.08) 0%, transparent 25%), 
+               radial-gradient(circle at 100% 100%, rgba(80,200,255,0.04) 0%, transparent 25%),
+               linear-gradient(180deg, #05061a 0%, #08142a 100%);
+    
+    --text-light: #F5F8FB;
+    --text-muted: #9fb3d1;
+    --border-glow: rgba(255, 255, 255, 0.08);
+    
+    /* Tokens de diseño */
+    --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.5);
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --border-radius-md: 14px;
+    --border-radius-lg: 20px;
+    --border-radius-xl: 28px;
+    
+    --transition-speed: 0.3s;
+    --easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --max-width-md: 850px;
+}
+
+/* Base */
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.add-memories-screen {
+    width: 100%;
+    min-height: 100vh;
+    padding: 10px var(--spacing-md) 40px; /* Padding superior mínimo */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+/* ---------- HEADER COMPACTO ---------- */
+.add-header {
+    width: 100%;
+    max-width: var(--max-width-md);
+    display: grid;
+    grid-template-columns: 100px 1fr 100px; /* Espacio para el botón y equilibrio visual */
+    align-items: center;
+    padding: 15px 0;
+    margin-bottom: 10px; /* Espacio mínimo para que el main suba */
+    animation: fadeInDown 0.6s var(--easing);
+}
+
+.add-title {
+    grid-column: 2;
+    font-family: 'Permanent Marker', cursive;
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-light);
+    text-shadow: 0 4px 10px rgba(255, 85, 85, 0.3);
+}
+
+.heart-icon {
+    color: var(--primary-color);
+    font-size: 0.8em;
+    animation: pulse 2s infinite;
+}
+
+/* ---------- BOTÓN VOLVER (ESTILO CÁPSULA) ---------- */
+.back-home-btn {
+    grid-column: 1;
+    justify-self: start;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glow);
+    padding: 8px 16px;
+    border-radius: 50px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all var(--transition-speed) var(--easing);
+    backdrop-filter: blur(5px);
+}
+
+.back-home-btn:hover {
+    background: rgba(255, 85, 85, 0.15);
+    border-color: var(--primary-color);
+    color: #fff;
+    transform: translateX(-4px);
+}
+
+/* ---------- CONTENEDOR PRINCIPAL (GLASS CARD) ---------- */
+.add-form-container {
+    width: 100%;
+    max-width: var(--max-width-md);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border-glow);
+    border-radius: var(--border-radius-xl);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-lg);
+    animation: fadeInUp 0.8s var(--easing);
+}
+
+.form-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-row {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.form-group.half { flex: 1; }
+
+/* ---------- INPUTS Y TEXTAREAS ---------- */
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-family: 'Permanent Marker', sans-serif;
+    color: var(--primary-light);
+    font-size: 1rem;
+}
+
+.form-input, .form-textarea {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius-md);
+    padding: 12px 16px;
+    color: #fff;
+    font-size: 0.95rem;
+    transition: all 0.3s var(--easing);
+}
+
+.form-input:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 15px rgba(255, 85, 85, 0.1);
+}
+
+/* ---------- ÁREA DE CARGA DE IMAGEN ---------- */
+.image-upload-area {
+    width: 100%;
+    min-height: 180px;
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius-lg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.01);
+    transition: all 0.4s var(--easing);
+}
+
+.image-upload-area:hover {
+    border-color: var(--primary-color);
+    background: rgba(255, 85, 85, 0.02);
+}
+
+.upload-placeholder {
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.upload-placeholder i {
+    font-size: 2.5rem;
+    color: var(--primary-light);
+    margin-bottom: 10px;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 350px;
+    border-radius: var(--border-radius-md);
+    object-fit: contain;
+}
+
+/* ---------- BOTONES DE OPCIÓN (PILLS) ---------- */
+.option-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.option-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    color: var(--text-light);
+    font-family: 'Permanent Marker', cursive;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s var(--easing);
+}
+
+.option-btn.active#markFavoriteBtn {
+    background: rgba(255, 85, 85, 0.2);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.option-btn.active#markSpecialBtn {
+    background: rgba(255, 204, 68, 0.2);
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+/* ---------- ACCIONES (GUARDAR/CANCELAR) ---------- */
+.form-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: var(--border-radius-md);
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    justify-content: center; align-items: center;
+    gap: 10px;
+    transition: all 0.3s var(--easing);
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+    color: #fff;
+    box-shadow: 0 10px 20px rgba(255, 85, 85, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(255, 85, 85, 0.3);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border: 1px solid var(--border-glow);
+}
+
+.btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
+
+/* ---------- ANIMACIONES ---------- */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+    .add-header {
+        grid-template-columns: 50px 1fr 50px;
+    }
+    .btn-text { display: none; } /* Solo icono en móvil para volver */
+    .back-home-btn { padding: 10px; padding-top: 20px; width: 40px; height: 40px; justify-content: center; }
+    .form-row { flex-direction: column; gap: 0; }
+    .form-actions { flex-direction: column; }
+}
