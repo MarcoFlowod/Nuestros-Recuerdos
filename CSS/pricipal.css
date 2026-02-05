@@ -117,6 +117,30 @@ body {
     overflow-x: hidden; /* Bloquea scroll horizontal */
     position: relative;
 }
+/* Scrollbar transparente: WebKit (Chrome, Edge, Safari) y Firefox */
+/* Mantiene el scroll pero lo hace visualmente transparente */
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background: transparent;
+}
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 10px;
+}
+
+/* Firefox */
+html, body, .memories-screen {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+/* Si prefieres esconder completamente la scrollbar en WebKit, descomenta:
+   *::-webkit-scrollbar { display: none; }
+   Ten en cuenta que ocultar por completo puede reducir la accesibilidad. */
 .particle, .heart {
     position: fixed;
     pointer-events: none;
@@ -238,7 +262,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: calc(var(--spacing-lg)) var(--spacing-xl);
+    padding: calc(var(--spacing-sm)) var(--spacing-sm);
     gap: var(--spacing-md);
     background: rgba(16, 14, 15, 0.7);
     backdrop-filter: blur(10px);
