@@ -28,7 +28,7 @@
             <div class="pixel-corner"></div>
             <div class="pixel-corner"></div>
             <div class="pixel-corner"></div>
-            <h1 class="title" id="teQuieroLink" onclick="location.href='#recuerdoScreen'" style="color:#ff5555; cursor: pointer;">
+            <h1 class="title" id="teQuieroLink" onclick="goToMemoriesScreen()" style="color:#ff5555; cursor: pointer;">
                 TE QUIERO
             </h1>
         </div>
@@ -46,7 +46,7 @@
         <header class="header-container">
             <!--===== Navegación superior =====-->
             <div class="header-top">
-                <button id="backToHome" class="back-home-btn btn-top" aria-label="Volver al inicio" onclick="location.href='#startScreen'">
+                <button id="backToHome" class="back-home-btn btn-top desktop-only" aria-label="Volver al inicio" onclick="goToStartScreen()">
                     <i class="fas fa-home"></i>
                     <span class="btn-text">Inicio</span>
                 </button>
@@ -54,6 +54,13 @@
                 <button id="musicToggle" class="music-btn paused" aria-label="Controlar música">
                     <i class="fas fa-volume-mute"></i>
                     <span class="waves"></span>
+                </button>
+
+                <!-- Botón hamburguesa para móvil -->
+                <button id="mobileMenuToggle" class="mobile-menu-btn" aria-label="Abrir menú" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </button>
                 
                 <div class="header-center">
@@ -63,7 +70,7 @@
                         <i class="fas fa-heart heart-icon igo"></i>
                     </h2>
                 </div>
-                <button id="addBtn" class="back-home-btn btn-top" aria-label="Volver al inicio" onclick="window.location.href='./add/agregar.html'" >
+                <button id="addBtn" class="btn-top desktop-only" aria-label="Volver al inicio" onclick="window.location.href='./add/agregar.html'" >
                     <svg class="icon-add-image" viewBox="0 0 24 24" overflow="visible" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <mask id="hole">
@@ -81,9 +88,51 @@
                     </svg>
                     <span class="btn-text">Agregar♥</span>
                 </button>
+
+                <!-- Menú desplegable para móvil -->
+                <nav id="mobileMenu" class="mobile-menu" aria-hidden="true">
+                    <button class="mobile-menu-item back-home-btn" onclick="goToStartScreen(); document.getElementById('mobileMenuToggle').click()">
+                        <i class="fas fa-home"></i>
+                        <span>Inicio</span>
+                    </button>
+                    <button class="mobile-menu-item filter-btn" data-filter="all" onclick="document.getElementById('mobileMenuToggle').click()">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Todos</span>
+                    </button>
+                    <button class="mobile-menu-item filter-btn" data-filter="favorite" onclick="document.getElementById('mobileMenuToggle').click()">
+                        <i class="fas fa-heart"></i>
+                        <span>Favoritas</span>
+                    </button>
+                    <button class="mobile-menu-item filter-btn" data-filter="special" onclick="document.getElementById('mobileMenuToggle').click()">
+                        <i class="fas fa-star"></i>
+                        <span>Especiales</span>
+                    </button>
+                    <button class="mobile-menu-item filter-btn" data-filter="recent" onclick="document.getElementById('mobileMenuToggle').click()">
+                        <i class="fas fa-clock"></i>
+                        <span>Recientes</span>
+                    </button>
+                    <button id="addBtnMobile" class="mobile-menu-item" onclick="window.location.href='./add/agregar.html'">
+                        <svg class="icon-add-image" viewBox="0 0 24 24" overflow="visible" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <mask id="hole-mobile">
+                                <rect x="0" y="0" width="24" height="24" fill="white" />
+                                <path d="M19 2.5V7.5M16.5 5H21.5" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </mask>
+                            </defs>
+
+                            <g mask="url(#hole-mobile)">
+                                <rect class="stroke-color" x="2.5" y="2.5" width="19" height="19" rx="5" stroke-width="2.5" fill="none"/>
+                                <circle class="fill-color" cx="8.5" cy="8.5" r="2.5" />
+                                <path class="fill-color" d="M2.5 16C5 13.5 8 13.5 10.5 16C13 18.5 16 13 21.5 16V17C21.5 19.5 19.5 21.5 17 21.5H7C4.5 21.5 2.5 19.5 2.5 17V16Z" />
+                                <circle class="fill-color" cx="19" cy="5" r="5" />
+                            </g>
+                        </svg>
+                        <span>Agregar♥</span>
+                    </button>
+                </nav>
             </div>
             <!--===== Filtros de búsqueda ======-->
-            <div class="filters-container">
+            <div class="filters-container desktop-only">
                 <div class="filter-buttons">
                     <button class="filter-btn active" data-filter="all">
                         <i class="fas fa-layer-group"></i>
@@ -175,5 +224,6 @@
     <script src="./JS/canvas.js"></script>
     <script src="./JS/galery.js"></script>
     <script src="./JS/filtros.js"></script>
+    <script src="./JS/hamburguesa.js"></script>
 </body>
 </html>

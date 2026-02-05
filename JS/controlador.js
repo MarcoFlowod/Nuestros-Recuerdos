@@ -78,6 +78,16 @@ class ScreenManager {
     switchToStartScreen() {
         console.log('[ScreenManager] Volviendo a pantalla de inicio');
         
+        // Pausar la música al volver al inicio
+        if (!music.paused) {
+            fadeOut();
+            musicBtn.classList.remove("playing");
+            musicBtn.classList.add("paused");
+            icon.className = "fas fa-volume-mute";
+            // Marcar que la música no está activa
+            musicStarted = false;
+        }
+        
         if (this.memoriesScreen) {
             this.memoriesScreen.style.opacity = '0';
             
@@ -195,7 +205,8 @@ function fadeOut() {
 
 /* ===== Click en "TE QUIERO" ===== */
 startTitle.addEventListener("click", () => {
-    if (!musicStarted) {
+    // Si la música está pausada o no se ha iniciado, reiniciar con fadeIn
+    if (music.paused || !musicStarted) {
         fadeIn();
         musicStarted = true;
 
@@ -221,3 +232,32 @@ musicBtn.addEventListener("click", () => {
         icon.className = "fas fa-volume-mute";
     }
 });
+
+// ========== FUNCIONES DE NAVEGACIÓN ==========
+// Funciones globales para navegar entre pantallas
+
+function goToStartScreen() {
+    const screenManager = window.screenManager;
+    if (screenManager) {
+        screenManager.switchToStartScreen();
+    } else {
+        // Fallback si no está disponible el ScreenManager
+        const startScreen = document.getElementById('startScreen');
+        if (startScreen) {
+            startScreen.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+}
+
+function goToMemoriesScreen() {
+    const screenManager = window.screenManager;
+    if (screenManager) {
+        screenManager.switchToMemoriesScreen();
+    } else {
+        // Fallback si no está disponible el ScreenManager
+        const memoriesScreen = document.getElementById('memoriesScreen');
+        if (memoriesScreen) {
+            memoriesScreen.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+}
