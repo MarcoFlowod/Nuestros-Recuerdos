@@ -234,21 +234,57 @@ body {
 }
 
 .header-top {
+    position: relative;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-lg) var(--spacing-xl);
-    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: calc(var(--spacing-lg)) var(--spacing-xl);
+    gap: var(--spacing-md);
     background: rgba(16, 14, 15, 0.7);
     backdrop-filter: blur(10px);
     width: 100%;
-    border-bottom: var(--border-width-thin) solid var(--border-color);;
+    border-bottom: var(--border-width-thin) solid var(--border-color);
+    min-height: calc(var(--header-height) - 10px);
 }
 
 .header-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
-    flex-grow: 1;
+    pointer-events: none;
     min-width: 200px;
+    z-index: 1010;
+}
+
+/* Forzar que el botón de agregar quede a la derecha */
+#addBtn {
+    margin-left: auto;
+}
+
+/* Permitir interacción en el título (si se quiere que sea clicable) */
+.gallery-title {
+    pointer-events: auto;
+}
+
+/* Ajustes en pantallas pequeñas: no usar posicionamiento absoluto para evitar solapamientos */
+@media (max-width: 720px) {
+    .header-top {
+        justify-content: space-between;
+        padding: var(--spacing-sm) var(--spacing-md);
+        min-height: auto;
+    }
+    .header-center {
+        position: static;
+        transform: none;
+        pointer-events: auto;
+        margin: 0 auto;
+        padding: var(--spacing-sm) 0;
+    }
+    #addBtn {
+        margin-left: 0;
+    }
 }
 
 .gallery-title {

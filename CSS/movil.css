@@ -5,12 +5,32 @@
 @media (max-width: 768px) {
     
     .gallery-title {
-        font-size: var(--font-size-xl); 
+        font-size: var(--font-size-base); 
+        margin: 0;
+    }
+    .borrar {
+        display: none;
+    }
+    .igo {
+        font-size: 20px;
     }
     .header-top {
-        padding: 15px 5px;
+        padding: 10px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0px;
     }
-    /* Mostrar solo icono en el botón volver en pantallas móviles (≤768px) 🔧 */
+    .header-center {
+    position: static;
+    transform: none;
+    pointer-events: auto;
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+    z-index: 1020;
+    }
+
     .btn-top {
         display: inline-flex;
         align-items: center;
@@ -25,13 +45,37 @@
         padding-top: 10px;
     }
 
-    #addBtn {
-        border-left: red solid 2px;
+    .music-btn {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        padding: 4px;        
+    }
+    .music-btn i {
+        font-size: 15px;
     }
 
-    #backToHome {
-        border-right: red solid 2px;
+    .header-center {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 1030;
     }
+
+
+
+    /* Asegura que el boton de añadir quede a la derecha siempre */
+    #addBtn {
+        margin-left: auto;
+    }
+    /* quitar bordes de depuración y asegurar separación */
+    #addBtn,
+    #backToHome {
+        border: none;
+    }
+
     /* Restaurar tamaño visual del icono (font o svg) */
     .btn-top i,
     .btn-top svg,
@@ -67,7 +111,8 @@
         width: 100%;
         height: auto;
         padding: 0 8px;
-        margin: 40px auto;
+        margin: 0 auto;
+        margin-top: 20px;
         z-index: 20;
     }
     .mobile-swiper .swiper-slide {
@@ -116,7 +161,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, var(--opacity-overlay)) 100%);
+        background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, var(--opacity-disabled)) 100%);
         opacity: 1;
         transition: opacity var(--transition-speed) ease;
         display: flex;
@@ -221,7 +266,7 @@
     .mobile-gallery-image .description h3 {
         color: #ff8888;
         margin-bottom: var(--spacing-sm);
-        font-size: var(--font-size-xl);
+        font-size: var(--font-size-lg);
     }
 
     .mobile-gallery-image .description p {
@@ -264,6 +309,22 @@
         font-size: 40px;
         top: 20px;
         right: 20px;
+    }
+
+    /* Forzar que el header-center no se superponga en móvil
+       (sobrescribe posicionamiento absoluto aplicado en pricipal.css) */
+
+
+    /* Reglas extra para pantallas muy pequeñas (ej. 360px de ancho)
+       Forzamos una sola fila: botones a los lados y título centrado sin wrap */
+    @media (max-width: 360px) {
+
+
+
+
+        /* Si el icono de música sigue causando solapamiento, se puede ocultar
+           en pantallas muy pequeñas; dejar comentado para opción futura */
+        /* .music-btn { display: none; } */
     }
 
 }
