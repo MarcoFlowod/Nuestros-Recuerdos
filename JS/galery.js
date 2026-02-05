@@ -46,6 +46,21 @@ function cargarRecuerdosDesdeFirebase() {
             .map(([key, val]) => (Object.assign({ key }, val)))
             .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
+        // Sincronizar marcas de favorito/especial desde la base de datos hacia localStorage
+        // para que FilterManager las reconozca al inicializarse.
+        try {
+            const favIndices = [];
+            const specialIndices = [];
+            listaRecuerdos.forEach((foto, idx) => {
+                if (foto.isFavorite) favIndices.push(idx);
+                if (foto.isSpecial) specialIndices.push(idx);
+            });
+            localStorage.setItem('favorites', JSON.stringify(favIndices));
+            localStorage.setItem('specials', JSON.stringify(specialIndices));
+        } catch (e) {
+            console.warn('[galery] No se pudo sincronizar favoritos/especiales con localStorage', e);
+        }
+
         listaRecuerdos.forEach((foto, index) => {
             // 1. Generar para Desktop usando la plantilla existente
             if (template && galeriaContenedor) {
@@ -115,10 +130,22 @@ function cargarRecuerdosDesdeFirebase() {
                 if (foto.key) slide.dataset.key = foto.key;
                 slide.innerHTML = `
                     <figure>
-                        <img src="${foto.url}" alt="${foto.titulo}">
-                        <div class="image-tags">
-                            <span class="fecha">${foto.fecha || ''}</span>
-                            <span class="lugar">${foto.lugar || ''}</span>
+                        <div class="image-container">
+                            <img src="${foto.url}" alt="${foto.titulo}" onclick="FullImg(this.src)">
+                            <div class="info-text">
+                                <span class="fecha">${foto.fecha || ''}</span>
+                                <span class="lugar">${foto.lugar || ''}</span>
+                            </div>
+                        </div>
+                        <div class="image-overlay">
+                            <div class="top-btns">
+                                <button class="favorite-btn" title="Marcar como favorito">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                                <button class="especial-btn" title="Marcar como especial">
+                                    <i class="far fa-star"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="description">
                             <h3>${foto.titulo || ''}</h3>
@@ -178,10 +205,22 @@ function crearHTMLRecuerdo(foto, tipo) {
         return `
             <div class="swiper-slide mobile-gallery-image ${categorias.join(' ')}">
                 <figure>
-                    <img src="${foto.url}" alt="${foto.titulo}">
-                    <div class="image-tags">
-                        <span class="fecha">${foto.fecha}</span>
-                        <span class="lugar">${foto.lugar}</span>
+                    <div class="image-container">
+                        <img src="${foto.url}" alt="${foto.titulo}" onclick="FullImg(this.src)">
+                        <div class="info-text">
+                            <span class="fecha">${foto.fecha}</span>
+                            <span class="lugar">${foto.lugar}</span>
+                        </div>
+                    </div>
+                    <div class="image-overlay">
+                        <div class="top-btns">
+                            <button class="favorite-btn" title="Marcar como favorito">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <button class="especial-btn" title="Marcar como especial">
+                                <i class="far fa-star"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="description">
                         <h3>${foto.titulo}</h3>
@@ -240,7 +279,7 @@ async function deleteImg() {
         setTimeout(() => { alert('Imagen eliminada.'); }, 100);
     } catch (err) {
         console.error('Error eliminando imagen:', err);
-        alert('Error al eliminar la imagen. Revisa la consola.');
+        alert('Error al eliminar la imagen.');
     }
 }
 

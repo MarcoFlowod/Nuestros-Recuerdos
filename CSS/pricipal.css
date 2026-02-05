@@ -99,20 +99,31 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    max-width: 100%; /* Evita que elementos superen el viewport */
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; /* Corta cualquier cosa que sobresalga a los lados */
 }
 
 body {
     font-family: 'Permanent Marker', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #0a0a1a;
     color: white;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; /* Bloquea scroll horizontal */
+    position: relative;
 }
 .particle, .heart {
-    position: absolute;
+    position: fixed;
     pointer-events: none;
     animation: magic 2s ease-out forwards;
     z-index: 1000;
     margin: 0;
-    height: 100vh;
+    padding: 0;
 }
 
 .particle {
@@ -183,7 +194,8 @@ body {
     background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2a 50%, #0a1a2a 100%);
     transition: opacity 0.8s ease, visibility 0.8s ease;
     position: relative;
-    min-height: 100vh;
+    min-height: 100svh; /* móvil moderno */
+    min-height: 100vh;  /* fallback */
     scroll-behavior: smooth;
 }
 
@@ -263,7 +275,67 @@ body {
     gap: var(--spacing-lg);
 }
 
-.back-home-btn {
+.music-btn {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #222;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.music-btn:hover {
+    transform: scale(1.08);
+}
+
+.music-btn i {
+    color: #fff;
+    font-size: 20px;
+    z-index: 2;
+}
+
+/* Ondas */
+.music-btn .waves {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.6);
+    opacity: 0;
+}
+
+/* Reproduciendo */
+.music-btn.playing {
+    background: #ff5555;
+}
+
+.music-btn.playing .waves {
+    animation: pulse 1.4s infinite;
+    opacity: 1;
+}
+
+/* Pausado */
+.music-btn.paused {
+    background: #222;
+}
+
+.music-btn.paused .waves {
+    animation: none;
+    opacity: 0;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.6; }
+    100% { transform: scale(1.7); opacity: 0; }
+}
+
+
+.btn-top {
     background: rgba(255, 255, 255, 0.2);
     border: var(--border-width-medium) solid white;
     color: white;
@@ -282,7 +354,7 @@ body {
     height: auto;
 }
 
-.back-home-btn:hover {
+.btn-top:hover {
     background: white;
     color: var(--primary-color);
     transform: translateY(-2px);
@@ -308,7 +380,7 @@ body {
     transition: all var(--transition-speed) ease;
 }
 
-.back-home-btn .btn-text {
+.btn-top .btn-text {
     display: inline;
 }
 
@@ -651,13 +723,11 @@ body {
 
 /* ========== MODAL para full imagen ========== */
 
+
 .full-img {
-    width: 100%;
-    height: 100vh;
     position: fixed;
-    top: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.8);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
     display: none;
     justify-content: center;
     align-items: center;
@@ -665,22 +735,28 @@ body {
 }
 
 .full-img img {
-    max-width: 90%;
-    max-height: 80%;
+    width: auto;
+    height: auto;
+    max-width: 90vw;
+    max-height: 80vh;
+    object-fit: contain;
     border-radius: 10px;
 }
+
+
 .full-img span {
     position: absolute;
-    top: 20px;
-    right: 30%;
+    top: 16px;
+    right: 16p;
     font-size: 40px;
     color: #fff;
     cursor: pointer;
 }
+
 /* Botón para eliminar imagen dentro del modal */
 .full-img .modal-btn {
     position: absolute;
-    top: 18px;
+    bottom: 18px;
     font-size: 18px;
     color: #fff;
     background: rgba(255,85,85,0.12);
@@ -696,7 +772,7 @@ body {
     background: rgba(255,85,85,0.22);
 }
 .full-img .delete-btn {
-    right: 36%;
+    right: 10px;
 }
 .full-img .modal-btn i { font-size: 18px; }
 
@@ -815,7 +891,7 @@ a:focus-visible {
 @media print {
     .header-container,
     .control-btn,
-    .back-home-btn,
+    .btn-top,
     .filter-buttons,
     .image-navigation,
     .special-message {

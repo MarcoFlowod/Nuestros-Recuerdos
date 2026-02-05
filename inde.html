@@ -8,17 +8,16 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Swiper CSS (solo usado en pantallas móviles) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="./CSS/starScreen.css">
-    <link rel="stylesheet" href="./CSS/pricipalScreen.css">
+    <link rel="stylesheet" href="./CSS/inicio.css">
+    <link rel="stylesheet" href="./CSS/pricipal.css">
     <link rel="stylesheet" href="./CSS/movil.css">
     <title>Nuestros Recuerdos ♥</title>
 </head>
 <body>
-    <audio id="backgroundMusic" autoplay loop>
-        <source src="https://raw.githubusercontent.com/MarcoFlowod/Proyectos-para-dedicar/main/Proyectos%E2%99%A5/imagenes/I'm%20Not%20In%20Love.mp3" type="audio/mpeg">
-        Tu navegador no soporta audio.
-    </audio>
 
+        <audio id="bgMusic" loop>
+            <source src="https://raw.githubusercontent.com/MarcoFlowod/Proyectos-para-dedicar/main/Proyectos%E2%99%A5/imagenes/Down%20With%20My%20Baby-Kevin%20Johansen.mp3" type="audio/mpeg">
+        </audio>
 <!-- ====== Pantalla de incio =====-->
     <section id="startScreen" class="start-screen">
         <canvas id="loveRain"></canvas>
@@ -47,9 +46,14 @@
         <header class="header-container">
             <!--===== Navegación superior =====-->
             <div class="header-top">
-                <button id="backToHome" class="back-home-btn" aria-label="Volver al inicio" onclick="location.href='#startScreen'">
-                    <i class="fas fa-home"></i>
+                <button id="backToHome" class="back-home-btn btn-top" aria-label="Volver al inicio" onclick="location.href='#startScreen'">
+                    <i class="fas fa-volume-mute"></i>
                     <span class="btn-text">Inicio</span>
+                </button>
+
+                <button id="musicToggle" class="music-btn paused" aria-label="Controlar música">
+                    <i class="fas fa-volume-mute"></i>
+                    <span class="waves"></span>
                 </button>
                 
                 <div class="header-center">
@@ -59,7 +63,7 @@
                         <i class="fas fa-heart heart-icon"></i>
                     </h2>
                 </div>
-                <button id="addBtn" class="back-home-btn" aria-label="Volver al inicio" onclick="window.location.href='./add/agregarRecuerdos.html'" >
+                <button id="addBtn" class="back-home-btn btn-top" aria-label="Volver al inicio" onclick="window.location.href='./add/agregar.html'" >
                     <svg class="icon-add-image" viewBox="0 0 24 24" overflow="visible" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <mask id="hole">
@@ -153,7 +157,7 @@
         </footer>
     </section>
 <!--=========== Modal para ver imagen ampliada ==========-->
-    <div id="FullImgBox" class="full-img modal">
+    <div id="FullImgBox" class="full-img">
         <img id="fullImg" src="" alt="">
         <button id="deleteImgBtn" class="modal-btn delete-btn" title="Eliminar imagen" aria-label="Eliminar imagen">
             <i class="fas fa-trash"></i>
@@ -168,11 +172,8 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     <!-- Scripts -->
     <script src="./JS/controlador.js"></script>
-    <script src="./JS/screen1.js"></script>
-    <script src="./JS/screen2.js"></script>
-    <script src="./JS/galeria.js"></script>
+    <script src="./JS/canvas.js"></script>
+    <script src="./JS/galery.js"></script>
     <script src="./JS/filtros.js"></script>
-
-
 </body>
 </html>

@@ -6,7 +6,6 @@ class ScreenManager {
         this.startScreen = document.getElementById('startScreen');
         this.memoriesScreen = document.getElementById('memoriesScreen');
         this.teQuieroLink = document.getElementById('teQuieroLink');
-        this.backgroundMusic = document.getElementById('backgroundMusic');
         this.rainContainer = document.getElementById('rain');
         this.currentScreen = 'start';
         
@@ -61,8 +60,7 @@ class ScreenManager {
                 startHeartRain(this.rainContainer);
             }
             
-            // Reproducir música con interacción del usuario
-            this.setupMusicPlayback();
+            // Reproducir música con interacción del usuario (eliminado)
             
             // Iniciar animación de entrada para imágenes
             setTimeout(() => {
@@ -93,31 +91,13 @@ class ScreenManager {
                     this.startScreen.style.visibility = 'visible';
                 }
                 
-                // Pausar música
-                if (this.backgroundMusic) {
-                    this.backgroundMusic.pause();
-                    this.backgroundMusic.currentTime = 0;
-                }
                 
                 this.currentScreen = 'start';
             }, 300);
         }
     }
 
-    setupMusicPlayback() {
-        if (this.backgroundMusic) {
-            this.backgroundMusic.volume = 0.3;
-            
-            const playMusic = () => {
-                this.backgroundMusic.play().catch(e => {
-                    console.log("[ScreenManager] Autoplay bloqueado:", e);
-                });
-                document.removeEventListener('click', playMusic);
-            };
-            
-            document.addEventListener('click', playMusic);
-        }
-    }
+    // setupMusicPlayback removed (audio handling disabled)
 
     setupFiltersScroll() {
         const filtersContainer = document.querySelector('.filters-container');
@@ -168,4 +148,76 @@ let swiper = new Swiper(".mySwiper", {
         slideShadows: true,
     },
     loop: true,
+});
+// ========== GESTOR DE MÚSICA DE FONDO ==========
+const music = document.getElementById("bgMusic");
+const musicBtn = document.getElementById("musicToggle");
+const icon = musicBtn.querySelector("i");
+const startTitle = document.getElementById("teQuieroLink");
+
+const MAX_VOLUME = 0.4;
+const FADE_TIME = 1500;
+let fadeInterval = null;
+let musicStarted = false;
+
+/* ===== Fade In ===== */
+function fadeIn() {
+    clearInterval(fadeInterval);
+    music.volume = 0;
+    music.play();
+
+    const step = MAX_VOLUME / (FADE_TIME / 50);
+
+    fadeInterval = setInterval(() => {
+        if (music.volume < MAX_VOLUME) {
+            music.volume = Math.min(music.volume + step, MAX_VOLUME);
+        } else {
+            clearInterval(fadeInterval);
+        }
+    }, 50);
+}
+
+/* ===== Fade Out ===== */
+function fadeOut() {
+    clearInterval(fadeInterval);
+    const step = music.volume / (FADE_TIME / 50);
+
+    fadeInterval = setInterval(() => {
+        if (music.volume > 0.02) {
+            music.volume = Math.max(music.volume - step, 0);
+        } else {
+            music.pause();
+            music.volume = MAX_VOLUME;
+            clearInterval(fadeInterval);
+        }
+    }, 50);
+}
+
+/* ===== Click en "TE QUIERO" ===== */
+startTitle.addEventListener("click", () => {
+    if (!musicStarted) {
+        fadeIn();
+        musicStarted = true;
+
+        musicBtn.classList.remove("paused");
+        musicBtn.classList.add("playing");
+        icon.className = "fas fa-volume-up";
+    }
+});
+
+/* ===== Botón de control ===== */
+musicBtn.addEventListener("click", () => {
+    if (!musicStarted) return;
+
+    if (music.paused) {
+        fadeIn();
+        musicBtn.classList.add("playing");
+        musicBtn.classList.remove("paused");
+        icon.className = "fas fa-volume-up";
+    } else {
+        fadeOut();
+        musicBtn.classList.remove("playing");
+        musicBtn.classList.add("paused");
+        icon.className = "fas fa-volume-mute";
+    }
 });

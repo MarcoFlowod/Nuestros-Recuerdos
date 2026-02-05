@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Recuerdos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../CSS/pricipalScreen.css">
+    <link rel="stylesheet" href="../CSS/pricipal.css">
     <link rel="stylesheet" href="../CSS/movil.css">
-    <link rel="stylesheet" href="../CSS/Screen.css">
+    <link rel="stylesheet" href="../CSS/agregar.css">
 </head>
 <body>
     <div class="add-memories-screen">
         <header class="add-header">
-            <button id="backBtn" class="back-home-btn" onclick="window.location.href='../index.html'">
+            <button id="backBtn" class="back-home-btn" onclick="window.location.href='../inde.html'">
                 <i class="fas fa-arrow-left"></i>
                 <span class="btn-text">Volver</span>
             </button>
@@ -61,12 +61,12 @@
                         </div>
                         <div class="form-group half">
                             <label for="memoryLocation" class="form-label"><i class="fas fa-map-marker-alt"></i> Lugar</label>
-                            <input type="text" id="memoryLocation" class="form-input" placeholder="¿Dónde fue?">
+                            <input type="text" id="memoryLocation" class="form-input" placeholder="¿Dónde fue?" required>
                         </div>
                     </div>
 
                     <div class="form-section">
-                        <label class="form-label"><i class="fas fa-star"></i> Opciones especiales</label>
+                        <label class="form-label"><i class="fas fa-star"></i> Opciones especiales (No obligatorio)</label>
                         <div class="option-buttons">
                             <button type="button" class="option-btn" id="markFavoriteBtn">
                                 <i class="far fa-heart"></i> Favorito
@@ -76,6 +76,7 @@
                             </button>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="form-actions">
@@ -93,8 +94,8 @@
             <div class="success-content">
                 <i class="fas fa-check-circle"></i>
                 <h3>¡Recuerdo guardado!</h3>
-                <p>Tu recuerdo se ha subido a la nube.</p>
                 <button class="btn btn-primary" onclick="window.location.href='../index.html'">Ver Galería</button>
+                <button class="btn btn-secondary" id="addAnotherBtn">Agregar otro recuerdo</button>
             </div>
         </div>
     </div>
@@ -109,6 +110,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <script src="../JS/addScreen.js"></script>
+    <script src="../JS/agregar.js"></script>
 </body>
 </html>

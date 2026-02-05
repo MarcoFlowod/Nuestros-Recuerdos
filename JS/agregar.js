@@ -28,11 +28,27 @@ class AddMemoryScreen {
         this.successMessage = document.getElementById('successMessage');
         this.loadingModal = document.getElementById('loadingModal');
         
+        this.currentImageFile = null;
         this.isFavorite = false;
         this.isSpecial = false;
-        this.currentImageFile = null; 
+        this.markFavoriteBtn = document.getElementById('markFavoriteBtn');
+        this.markSpecialBtn = document.getElementById('markSpecialBtn');
         
         this.init();
+    }
+
+    toggleFavorite() {
+        this.isFavorite = !this.isFavorite;
+        if (!this.markFavoriteBtn) return;
+        this.markFavoriteBtn.classList.toggle('active', this.isFavorite);
+        this.markFavoriteBtn.innerHTML = `<i class="${this.isFavorite ? 'fas' : 'far'} fa-heart"></i> Favorito`;
+    }
+
+    toggleSpecial() {
+        this.isSpecial = !this.isSpecial;
+        if (!this.markSpecialBtn) return;
+        this.markSpecialBtn.classList.toggle('active', this.isSpecial);
+        this.markSpecialBtn.innerHTML = `<i class="${this.isSpecial ? 'fas' : 'far'} fa-star"></i> Especial`;
     }
 
     init() {
@@ -73,10 +89,6 @@ class AddMemoryScreen {
             this.handleImageFile(file);
         });
 
-        // Botones de opciones
-        document.getElementById('markFavoriteBtn').addEventListener('click', () => this.toggleFavorite());
-        document.getElementById('markSpecialBtn').addEventListener('click', () => this.toggleSpecial());
-
         // Formulario
         this.form.addEventListener('submit', (e) => this.handleSubmit(e));
 
@@ -84,6 +96,15 @@ class AddMemoryScreen {
         document.getElementById('cancelBtn').addEventListener('click', () => {
             if (confirm('¿Seguro que quieres salir?')) window.location.href = '../index.html';
         });
+        // Agregar otro recuerdo
+        const addAnotherBtn = document.getElementById('addAnotherBtn');
+        if (addAnotherBtn) {
+            addAnotherBtn.addEventListener('click', () => this.resetForm());
+        }
+
+        // Opciones especiales (favorito / especial)
+        if (this.markFavoriteBtn) this.markFavoriteBtn.addEventListener('click', (e) => { e.preventDefault(); this.toggleFavorite(); });
+        if (this.markSpecialBtn) this.markSpecialBtn.addEventListener('click', (e) => { e.preventDefault(); this.toggleSpecial(); });
     }
 
     setupDatePicker() {
@@ -126,23 +147,38 @@ class AddMemoryScreen {
         // Opcional: resetear formulario y volver a la galería después de un tiempo
         this.form.reset();
         this.removeImage();
-        setTimeout(() => {
-            this.successMessage.style.display = 'none';
-        }, 2000);
+        // Resetear flags y estado visual de botones
+        this.isFavorite = false;
+        this.isSpecial = false;
+        if (this.markFavoriteBtn) {
+            this.markFavoriteBtn.classList.remove('active');
+            this.markFavoriteBtn.innerHTML = `<i class="far fa-heart"></i> Favorito`;
+        }
+        if (this.markSpecialBtn) {
+            this.markSpecialBtn.classList.remove('active');
+            this.markSpecialBtn.innerHTML = `<i class="far fa-star"></i> Especial`;
+        }
     }
 
-    toggleFavorite() {
-        this.isFavorite = !this.isFavorite;
-        const btn = document.getElementById('markFavoriteBtn');
-        btn.classList.toggle('active', this.isFavorite);
-        btn.innerHTML = `<i class="${this.isFavorite ? 'fas' : 'far'} fa-heart"></i> Favorito`;
-    }
-
-    toggleSpecial() {
-        this.isSpecial = !this.isSpecial;
-        const btn = document.getElementById('markSpecialBtn');
-        btn.classList.toggle('active', this.isSpecial);
-        btn.innerHTML = `<i class="${this.isSpecial ? 'fas' : 'far'} fa-star"></i> Especial`;
+    // Resetear el formulario y permitir agregar otro
+    resetForm() {
+        this.form.reset();
+        this.removeImage();
+        this.successMessage.style.display = 'none';
+        this.currentImageFile = null;
+        this.isFavorite = false;
+        this.isSpecial = false;
+        if (this.markFavoriteBtn) {
+            this.markFavoriteBtn.classList.remove('active');
+            this.markFavoriteBtn.innerHTML = `<i class="far fa-heart"></i> Favorito`;
+        }
+        if (this.markSpecialBtn) {
+            this.markSpecialBtn.classList.remove('active');
+            this.markSpecialBtn.innerHTML = `<i class="far fa-star"></i> Especial`;
+        }
+        this.setupDatePicker();
+        // Scroll al inicio del formulario
+        window.scrollTo(0, 0);
     }
 
     async handleSubmit(event) {
@@ -154,7 +190,6 @@ class AddMemoryScreen {
 
         try {
             // 1. Subir a Cloudinary
-            // REEMPLAZA 'TU_CLOUD_NAME' con tu nombre de usuario de Cloudinary
             const imageUrl = await this.uploadToCloudinary(this.currentImageFile);
 
             // 2. Guardar en Firebase
@@ -164,8 +199,8 @@ class AddMemoryScreen {
                 descripcion: document.getElementById('memoryDescription').value.trim(),
                 fecha: document.getElementById('memoryDate').value,
                 lugar: document.getElementById('memoryLocation').value.trim() || "Lugar Especial",
-                isFavorite: this.isFavorite,
-                isSpecial: this.isSpecial,
+                isFavorite: !!this.isFavorite,
+                isSpecial: !!this.isSpecial,
                 timestamp: Date.now()
             };
 

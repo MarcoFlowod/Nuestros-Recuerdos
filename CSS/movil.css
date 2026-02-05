@@ -3,6 +3,7 @@
 }
 
 @media (max-width: 768px) {
+    
     .gallery-title {
         font-size: var(--font-size-xl); 
     }
@@ -10,7 +11,7 @@
         padding: 15px 5px;
     }
     /* Mostrar solo icono en el botón volver en pantallas móviles (≤768px) 🔧 */
-    .back-home-btn {
+    .btn-top {
         display: inline-flex;
         align-items: center;
         justify-content: space-around;
@@ -32,9 +33,9 @@
         border-right: red solid 2px;
     }
     /* Restaurar tamaño visual del icono (font o svg) */
-    .back-home-btn i,
-    .back-home-btn svg,
-    .back-home-btn .icon {
+    .btn-top i,
+    .btn-top svg,
+    .btn-top .icon {
         font-size: var(--font-size-xl);
         width: var(--icon-size, 24px);
         height: var(--icon-size, 24px);
@@ -44,8 +45,8 @@
     }
 
     /* Si el texto viene en un span con clase .btn-text o .text, ocultarlo accesiblemente */
-    .back-home-btn .btn-text,
-    .back-home-btn .text {
+    .btn-top .btn-text,
+    .btn-top .text {
         position: absolute !important;
         width: 1px;
         height: 1px;
@@ -143,13 +144,47 @@
         gap: var(--spacing-sm);
         align-items: center;
         justify-content: flex-end;
+        margin: var(--spacing-md);
     }
 
     .mobile-gallery-image .top-btns button {
-        background-color: rgba(0,0,0,0.4);
-        padding: 6px;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 8px;
         border-radius: 50%;
         color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1em;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-gallery-image .favorite-btn {
+        color: var(--primary-color);
+    }
+
+    .mobile-gallery-image .favorite-btn:active {
+        background: rgba(255, 85, 85, 0.5);
+        transform: scale(1.1);
+    }
+
+    .mobile-gallery-image .favorite-btn.active i {
+        color: #ff5555;
+    }
+
+    .mobile-gallery-image .especial-btn {
+        color: var(--secondary-color);
+    }
+
+    .mobile-gallery-image .especial-btn:active {
+        background: rgba(255, 204, 68, 0.5);
+        transform: scale(1.1);
+    }
+
+    .mobile-gallery-image .especial-btn.active i {
+        color: #ffcc44;
     }
 
     .mobile-gallery-image .info-text {
@@ -216,11 +251,19 @@
         margin-top: 10px;
     }
 
+    .full-img {
+        padding: 10px;
+        overflow: auto;
+    }
     .full-img img {
-        border-radius: 10px;
+        max-width: 100%;
+        max-height: calc(100vh - 20px);
+        border-radius: 6px;
     }
     .full-img span {
-        left: 5%;
+        font-size: 40px;
+        top: 20px;
+        right: 20px;
     }
 
 }
