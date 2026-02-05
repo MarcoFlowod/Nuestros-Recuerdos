@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
     <link rel="stylesheet" href="./CSS/inicio.css">
     <link rel="stylesheet" href="./CSS/pricipal.css">
-    <link rel="stylesheet" href="./CSS/movil.css">
+    <link rel="stylesheet" href="./CSS/movill.css">
     <title>Nuestros Recuerdos ♥</title>
 </head>
 <body>
@@ -46,7 +46,7 @@
         <header class="header-container">
             <!--===== Navegación superior =====-->
             <div class="header-top">
-                <button id="backToHome" class="back-home-btn btn-top desktop-only" aria-label="Volver al inicio" onclick="goToStartScreen()">
+                <button id="backToHome" class="back-home-btn btn-top" aria-label="Volver al inicio" onclick="goToStartScreen()">
                     <i class="fas fa-home"></i>
                     <span class="btn-text">Inicio</span>
                 </button>
@@ -55,6 +55,7 @@
                     <i class="fas fa-volume-mute"></i>
                     <span class="waves"></span>
                 </button>
+                <!-- <i class="fas fa-heart heart-icon mobile-heart"></i> -->
 
                 <!-- Botón hamburguesa para móvil -->
                 <button id="mobileMenuToggle" class="mobile-menu-btn" aria-label="Abrir menú" aria-expanded="false">
@@ -65,12 +66,12 @@
                 
                 <div class="header-center">
                     <h2 class="gallery-title">
-                        <i class="fas fa-heart heart-icon borrar"></i> 
+                        <i class="fas fa-heart heart-icon none"></i> 
                         Nuestros Recuerdos
-                        <i class="fas fa-heart heart-icon igo"></i>
+                        <i class="fas fa-heart heart-icon"></i>
                     </h2>
                 </div>
-                <button id="addBtn" class="btn-top desktop-only" aria-label="Volver al inicio" onclick="window.location.href='./add/agregar.html'" >
+                <button id="addBtn" class="btn-top" aria-label="Volver al inicio" onclick="window.location.href='./add/agregar.html'" >
                     <svg class="icon-add-image" viewBox="0 0 24 24" overflow="visible" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <mask id="hole">
@@ -132,7 +133,7 @@
                 </nav>
             </div>
             <!--===== Filtros de búsqueda ======-->
-            <div class="filters-container desktop-only">
+            <div class="filters-container">
                 <div class="filter-buttons">
                     <button class="filter-btn active" data-filter="all">
                         <i class="fas fa-layer-group"></i>

@@ -1,8 +1,6 @@
 .mobile-swiper {
     display: none;
 }
-
-/* Estilos por defecto (desktop) */
 .mobile-menu-btn {
     display: none !important;
 }
@@ -13,7 +11,7 @@
 
 @media (max-width: 768px) {
     
-    .desktop-only {
+    .btn-top, .filters-container {
         display: none !important;
     }
 
@@ -130,15 +128,15 @@
     .gallery-title {
         font-size: var(--font-size-xl); 
         margin: 0;
+        gap: 0;
+        padding: 0;
     }
-    .igo {
-        font-size: 20px;
-    }
+    
     .header-top {
         padding: 15px 8px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         gap: 0;
         position: relative;
     }
@@ -153,25 +151,27 @@
         font-size: 15px;
     }
 
+    .gallery-title {
+        font-size: var(--font-size-xl); 
+        margin: 0;
+        gap: 0;
+        padding: 0;
+        white-space: nowrap;
+        display: inline-block;
+    }
+
     .header-center {
         position: absolute;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        pointer-events: none;
+        pointer-events: auto;
         z-index: 1030;
-    }
-
-
-
-    /* Asegura que el boton de añadir quede a la derecha siempre */
-    #addBtn {
-        margin-left: auto;
-    }
-    /* quitar bordes de depuración y asegurar separación */
-    #addBtn,
-    #backToHome {
-        border: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        overflow: visible;
     }
     
     .gallery-grid {
@@ -179,7 +179,8 @@
     }
 
     .gallery-container {
-        padding-top: 0;
+        padding: 0 20px 20px 20px;
+        margin: 0;
     }
 
     .mobile-swiper {
@@ -197,13 +198,13 @@
         justify-content: center;
         align-items: center;
         background: transparent;
-        padding: 6px 0;
+        padding: 6px 0;/* la hora que lo arreglas */
     }
 
     /* Imagen base de la slide */
     .mobile-swiper .swiper-slide img {
         width: 100%;
-        height: var(--image-height-lg);
+        height: 420px;
         object-fit: cover;
         border-radius: 8px;
         display: block;
@@ -231,7 +232,7 @@
     }
 
     /* Mostrar overlay siempre en móvil (como en tu captura) */
-    .mobile-gallery-image .image-overlay {
+    .image-overlay {
         position: absolute;
         top: 0;
         left: 0;
@@ -243,24 +244,23 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        /* Permitir que el overlay no bloquee clicks sobre la imagen por defecto */
         pointer-events: none;
         padding: var(--spacing-md);
     }
 
     /* Botones en la esquina superior derecha */
     /* Los elementos interactivos dentro del overlay deben aceptar pointer-events */
-    .mobile-gallery-image .top-btns,
-    .mobile-gallery-image .top-btns button,
-    .mobile-gallery-image .info-text {
+    .top-btns,
+    .top-btns button,
+    .info-text {
         pointer-events: auto;
     }
 
-    .mobile-gallery-image .image-container {
+    .image-container {
         position: relative;
     }
 
-    .mobile-gallery-image .top-btns {
+    .top-btns {
         display: flex;
         gap: var(--spacing-sm);
         align-items: center;

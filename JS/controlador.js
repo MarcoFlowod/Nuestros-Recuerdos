@@ -69,9 +69,6 @@ class ScreenManager {
                     item.classList.add('animate-in');
                 });
             }, 500);
-            
-            // Configurar el scroll de filters-container
-            this.setupFiltersScroll();
         }, 300);
     }
 
@@ -108,31 +105,6 @@ class ScreenManager {
     }
 
     // setupMusicPlayback removed (audio handling disabled)
-
-    setupFiltersScroll() {
-        const filtersContainer = document.querySelector('.filters-container');
-        if (!filtersContainer) return;
-
-        let lastScrollY = 0;
-        const handleScroll = () => {
-            const currentScrollY = window.scrollY || document.documentElement.scrollTop;
-            
-            // Si está en el inicio (scroll cercano a 0), mostrar filtros
-            if (currentScrollY < 50) {
-                filtersContainer.classList.remove('hidden');
-            } else if (currentScrollY > lastScrollY) {
-                // Si hace scroll hacia abajo, ocultar filtros
-                filtersContainer.classList.add('hidden');
-            } else {
-                // Si hace scroll hacia arriba, mostrar filtros
-                filtersContainer.classList.remove('hidden');
-            }
-            
-            lastScrollY = currentScrollY;
-        };
-
-        window.addEventListener('scroll', handleScroll);
-    }
 
     getCurrentScreen() {
         return this.currentScreen;
